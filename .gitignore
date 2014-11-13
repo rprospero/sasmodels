@@ -3,3 +3,7 @@
 *.pyc
 *.cl
 *.so
+.project
+.pydevproject
+.settings/
+doc/
