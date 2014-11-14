@@ -13,7 +13,7 @@ import pprint
 import numpy as np
 from docutils.nodes import row
 from pytools.datatable import Row
-
+import ast
 
 class Params(object):
     '''
@@ -21,7 +21,7 @@ class Params(object):
     '''
 
 
-    def __init__(self, csvFilename="defs.csv"):
+    def __init__(self, csvFilename="defs_pd.csv"):
         '''
         Constructor
         '''
@@ -34,13 +34,32 @@ class Params(object):
     
     def getNewModelParamValue(self,modelName,ParamName):
         return self.data[ (self.data['model_new']==modelName)  & (self.data['param_new']==ParamName) ]['value']
-
+        
     def getOldModelParamNamesAndValues(self,modelName):
-        return self.data[ self.data['model_old']==modelName ][['param_old','value']].extract()
+        records = self.data[ self.data['model_old']==modelName ][['param_old','value']].extract()
+        return self._fromTabularToDict(records)
     
     def getNewModelParamNamesAndValues(self,modelName):
-        return self.data[ self.data['model_new']==modelName ][['param_new','value']].extract()
+        records =  self.data[ self.data['model_new']==modelName ][['param_new','value']].extract()
+        return self._fromTabularToDict(records)
+    
+    def getAllOldModelsNames(self):
+        records =  self.data['model_old']
+        return np.unique(records).tolist()
+    
+    def getAllNewModelsNames(self):
+        records =  self.data['model_new']
+        return np.unique(records).tolist()
 
+    def _fromTabularToDict(self,record):
+        retDic = {}
+        for k, v in record:
+            try:
+                v = ast.literal_eval(v)
+            except:
+                pass
+            retDic[k]=v
+        return retDic
 
     def _createNewCsvFileWithPDParams(self, paramsNewToExclude = ['scale', 'background', 'sld', 'solvent_sld', 
                                                                   'core_sld', 'shell_sld', 'solvent_sld' ]):
@@ -57,6 +76,10 @@ class Params(object):
                 oldModelParPD = row['param_old'] + "_pd"
                 newModelParPDN = row['param_new'] + "_pd_n"
                 oldModelParPDN = row['param_old'] + "_pd_n"
+                newModelParPDType = row['param_new'] + "_pd_type"
+                oldModelParPDType = row['param_old'] + "_pd_type"
+                newModelParPDSigma = row['param_new'] + "_pd_sigma"
+                oldModelParPDSigma = row['param_old'] + "_pd_sigma"
                 
                 newRow = row.copy()
                 newRow['param_new'] = newModelParPD
@@ -67,10 +90,19 @@ class Params(object):
                 newRow['param_new'] = newModelParPDN
                 newRow['param_old'] = oldModelParPDN
                 self.data = self.data.addrecords(newRow)
+                
+                newRow = row.copy()
+                newRow['param_new'] = newModelParPDType
+                newRow['param_old'] = oldModelParPDType
+                self.data = self.data.addrecords(newRow)
+                
+                newRow = row.copy()
+                newRow['param_new'] = newModelParPDSigma
+                newRow['param_old'] = oldModelParPDSigma
+                self.data = self.data.addrecords(newRow)
     
         self.data.sort(order=['model_old','model_new','param_old','param_new'])
         self.data.saveSV(outFile)
-    
     
     def _increaseStringLenght(self, nparray):
         """
@@ -93,8 +125,10 @@ def test():
     #print p.data
     pprint.pprint(p.getOldModelParamValue('CappedCylinderModel','len_cyl'))
     pprint.pprint(p.getOldModelParamNamesAndValues('CappedCylinderModel'))
+    pprint.pprint(p.getAllOldModelsNames())
     
-    p._createNewCsvFileWithPDParams()
+    
+    #p._createNewCsvFileWithPDParams()
     
 if __name__ == "__main__":
     test()        
