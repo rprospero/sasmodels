@@ -42,7 +42,8 @@ class Params(object):
         return self.data[ self.data['model_new']==modelName ][['param_new','value']].extract()
 
 
-    def _createNewCsvFileWithPDParams(self, paramsNewToExclude = ['scale', 'background', 'sld', 'solvent_sld' ]):
+    def _createNewCsvFileWithPDParams(self, paramsNewToExclude = ['scale', 'background', 'sld', 'solvent_sld', 
+                                                                  'core_sld', 'shell_sld', 'solvent_sld' ]):
         """
         Create new CSV file with _pd concatenate to fields
         Save the output file as *_pd_tmp.csv
