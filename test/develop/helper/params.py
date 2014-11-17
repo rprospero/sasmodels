@@ -7,6 +7,11 @@ See:
 http://web.mit.edu/yamins/www/tabular/
 
 '''
+import os
+from sphinx.util import FilenameUniqDict
+dirname, filename = os.path.split(os.path.abspath(__file__))
+import sys
+sys.path.append(dirname)
 
 import tabular as tb
 import pprint
@@ -25,8 +30,9 @@ class Params(object):
         '''
         Constructor
         '''
-        self.filename = csvFilename
-        self.data = tb.tabarray(SVfile = csvFilename, delimiter=',')
+        self.filename = self._getFullPath(csvFilename)
+        print "Using:",self.filename
+        self.data = tb.tabarray(SVfile = self.filename, delimiter=',')
         self.data = self._increaseStringLenght(self.data)
     
     def getOldModelParamValue(self,modelName,ParamName):
@@ -50,6 +56,21 @@ class Params(object):
     def getAllNewModelsNames(self):
         records =  self.data['model_new']
         return np.unique(records).tolist()
+    
+    def _getFullPath(self,filename):
+        dirname, pythonfilename = os.path.split(os.path.abspath(__file__))
+        if os.path.isabs(filename):
+            if os.path.exists(filename):
+                return filename
+            else:
+                raise IOError(filename)
+        else:
+            path = os.path.join(dirname, filename)
+            if os.path.exists(path):
+                return path
+            else :
+                raise IOError(path)
+                
 
     def _fromTabularToDict(self,record):
         retDic = {}

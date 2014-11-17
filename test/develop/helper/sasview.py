@@ -40,7 +40,7 @@ class SasViewModel(object):
             if ModelClass is None:
                 raise ValueError("could not find model %r in sans.models"%modelname)
             model = ModelClass()
-        
+                    
             for k,v in self.pars.items():
                 if k.endswith("_pd"):
                     model.dispersion[k[:-3]]['width'] = v
@@ -53,7 +53,7 @@ class SasViewModel(object):
                 else:
                     model.setParam(k, v)
             self.model = model
-    
+            
     
     def getModel(self):
         self._buildModel()
@@ -61,6 +61,7 @@ class SasViewModel(object):
     
     def eval(self,data):
         model = self.getModel()
-        model.evalDistribution(data)
+        ret = model.evalDistribution(data)
+        return ret
         
         
