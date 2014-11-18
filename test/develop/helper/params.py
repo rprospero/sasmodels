@@ -57,6 +57,29 @@ class Params(object):
         records =  self.data['model_new']
         return np.unique(records).tolist()
     
+    def getAllOldAndNewModelsNames(self):
+        records =  self.data[['model_old','model_new']]
+        return np.unique(records).tolist()
+    
+    def getOldModelUniqueCollumValue(self,modelName,collumnName):
+        """ Collumn value must be unique """
+        records = self.data[ self.data['model_old']==modelName  ][collumnName]
+        singleRecord =  np.unique(records)
+        if len(singleRecord) > 1:
+            raise ValueError("Collumn value is not unique! Check CSV File!")
+        else:
+            return singleRecord[0]
+    
+    def getNewModelUniqueCollumValue(self,modelName,collumnName):
+        """ Collumn value must be unique """
+        records = self.data[ self.data['model_new']==modelName  ][collumnName]
+        singleRecord =  np.unique(records)
+        if len(singleRecord) > 1:
+            raise ValueError("Collumn value is not unique! Check CSV File!")
+        else:
+            return singleRecord[0]
+    
+    
     def _getFullPath(self,filename):
         dirname, pythonfilename = os.path.split(os.path.abspath(__file__))
         if os.path.isabs(filename):
@@ -146,7 +169,7 @@ def test():
     #print p.data
     pprint.pprint(p.getOldModelParamValue('CappedCylinderModel','len_cyl'))
     pprint.pprint(p.getOldModelParamNamesAndValues('CappedCylinderModel'))
-    pprint.pprint(p.getAllOldModelsNames())
+    pprint.pprint(p.getOldModelUniqueCollumValue('CappedCylinderModel','cutoff'))
     
     
     #p._createNewCsvFileWithPDParams()

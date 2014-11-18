@@ -20,23 +20,38 @@ class Data(object):
         self.qmax = qmax
         self.data1D = None
         self.data2D = None
-        
-    def get1D(self, force=False):
+    
+    def _get1D(self, force):
         if force or self.data1D is None:
             from sasmodels.bumps_model import empty_data1D
             qmax = math.log10(self.qmax)
-            data = empty_data1D(np.logspace(qmax-3, qmax, 128))
-            self.data1D = data.x
+            self.data1D = empty_data1D(np.logspace(qmax-3, qmax, 128))
+            #self.data1D = data.x
         return self.data1D
+        
+    def get1DSasView(self, force=False):
+        data = self._get1D(force) 
+        return data.x
     
-    def get2D(self, force=False):
+    def _get2D(self, force):
         if force or self.data2D is None:
             from sasmodels.bumps_model import empty_data2D, set_beam_stop
             data = empty_data2D(np.linspace(-self.qmax, self.qmax, 128))
             set_beam_stop(data, 0.004)
-            self.data2D = [data.qx_data, data.qy_data]
+            self.data2D = data
         return self.data2D
     
+    def get2DSasView(self, force=False):
+        data = self._get2D(force) 
+        return [data.qx_data, data.qy_data]
+    
+    def get1DBumps(self, force=False):
+        data = self._get1D(force) 
+        return data
+    
+    def get2DBumps(self, force=False):
+        data = self._get2D(force) 
+        return data
     
     
 def test():

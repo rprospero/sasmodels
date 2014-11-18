@@ -3,9 +3,8 @@ Created on Nov 14, 2014
 
 @author: rhf
 '''
-from IPython.nbconvert.filters import datatypefilter
 
-class SasViewModel(object):
+class OldModel(object):
     '''
     classdocs
     '''
@@ -59,9 +58,10 @@ class SasViewModel(object):
         self._buildModel()
         return self.model
     
-    def eval(self,data):
+    def eval(self,data,nIterations=1):
         model = self.getModel()
-        ret = model.evalDistribution(data)
+        for _ in range(nIterations):
+            ret = model.evalDistribution(data)
         return ret
         
         
