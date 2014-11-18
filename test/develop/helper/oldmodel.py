@@ -4,6 +4,8 @@ Created on Nov 14, 2014
 @author: rhf
 '''
 
+import pprint as pp
+
 class OldModel(object):
     '''
     classdocs
@@ -15,7 +17,7 @@ class OldModel(object):
         Constructor
         '''
         self.modelname = modelname
-        self.pars = pars
+        self.pars = self._scaleSld(pars)
         self.model = None
         
     def _buildModel(self, force=False):
@@ -30,10 +32,7 @@ class OldModel(object):
         """
         
         if force or self.model is None: 
-            # convert model parameters from sasmodel form to sasview form
-            #print "old",sorted(pars.items())
             modelname  = self.modelname
-            #print "new",sorted(pars.items())
             sans = __import__('sans.models.'+modelname)
             ModelClass = getattr(getattr(sans.models,modelname,None),modelname,None)
             if ModelClass is None:
@@ -64,4 +63,9 @@ class OldModel(object):
             ret = model.evalDistribution(data)
         return ret
         
-        
+    def _scaleSld(self,pars):
+        """
+        For parameters starting with sld multiplies the value for 1e-6 
+        """
+        return dict((p, (v*1e-6 if p.startswith('sld') else v)) for p,v in pars.items())
+    

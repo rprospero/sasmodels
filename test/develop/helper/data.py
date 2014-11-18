@@ -53,6 +53,13 @@ class Data(object):
         data = self._get2D(force) 
         return data
     
+    def get1DIndex(self):
+        return slice(None, None)
+    
+    def get2DIndex(self):
+        return ~self.data2D.mask
+    
+    
     
 def test():
     import pprint as pp

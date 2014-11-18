@@ -11,6 +11,7 @@ from develop.helper.newmodel import NewModel
 from helper.data import Data
 
 import pprint as pp
+import numpy as np
 
 def testOldModel():
     
@@ -19,16 +20,20 @@ def testOldModel():
     
     for modelName in  allOldModelsNames:
         print "* Evaluating Old model:",  modelName
-        modelParams = p.getOldModelParamNamesAndValues(modelName)
-        model = OldModel(modelName,**modelParams)
-        
-        modelQMax = p.getOldModelUniqueCollumValue(modelName,"qmax")
-        d = Data(modelQMax)
-        
-        modelNIterations = p.getOldModelUniqueCollumValue(modelName,"n_sasview")
-        model.eval(d.get1DSasView(),nIterations=modelNIterations)
-        model.eval(d.get2DSasView(),nIterations=modelNIterations)
-        
+        ret1D,ret2D  = evalOldModel(p, modelName)
+
+def evalOldModel(p, modelName):
+    modelParams = p.getOldModelParamNamesAndValues(modelName)
+    model = OldModel(modelName,**modelParams)
+    
+    modelQMax = p.getOldModelUniqueCollumValue(modelName,"qmax")
+    d = Data(modelQMax)
+    
+    modelNIterations = p.getOldModelUniqueCollumValue(modelName,"n_sasview")
+    ret1D = model.eval(d.get1DSasView(),nIterations=modelNIterations)
+    ret2D = model.eval(d.get2DSasView(),nIterations=modelNIterations)
+    return ret1D,ret2D, d.get1DIndex(), d.get2DIndex()
+    
 def testNewModel():
     
     p = Params()
@@ -36,19 +41,23 @@ def testNewModel():
     
     for modelName in  allNewModelsNames:
         print "* Evaluating New model:",  modelName
-        modelParams = p.getNewModelParamNamesAndValues(modelName)
-        
-        modelDType = p.getNewModelUniqueCollumValue(modelName,"dtype")
-        model = NewModel(modelName,dtype=modelDType,**modelParams)
-        
-        modelQMax = p.getNewModelUniqueCollumValue(modelName,"qmax")
-        d = Data(modelQMax)
-        
-        modelNIterations = p.getNewModelUniqueCollumValue(modelName,"n_opencl")
-        modelCutOff = p.getNewModelUniqueCollumValue(modelName,"cutoff")
-        
-        model.eval(d.get1DBumps(), cutoff=modelCutOff, nIterations=modelNIterations)
-        model.eval(d.get2DBumps(), cutoff=modelCutOff, nIterations=modelNIterations)
+        ret1D,ret2D  = evalNewModel(p, modelName)
+
+def evalNewModel(p, modelName):
+    modelParams = p.getNewModelParamNamesAndValues(modelName)
+    
+    modelDType = p.getNewModelUniqueCollumValue(modelName,"dtype")
+    model = NewModel(modelName,dtype=modelDType,**modelParams)
+    
+    modelQMax = p.getNewModelUniqueCollumValue(modelName,"qmax")
+    d = Data(modelQMax)
+    
+    modelNIterations = p.getNewModelUniqueCollumValue(modelName,"n_opencl")
+    modelCutOff = p.getNewModelUniqueCollumValue(modelName,"cutoff")
+    
+    ret1D = model.eval(d.get1DBumps(), cutoff=modelCutOff, nIterations=modelNIterations)
+    ret2D = model.eval(d.get2DBumps(), cutoff=modelCutOff, nIterations=modelNIterations)
+    return ret1D,ret2D, d.get1DIndex(), d.get2DIndex()
 
 def testBothModels():
     p = Params()
@@ -57,11 +66,43 @@ def testBothModels():
     for oldModelName,newModelName in models:
         print "* Evaluating both Models:",oldModelName, "::", newModelName
         
-    
+        retOld1D,retOld2D, idxOld1D, idxOld2D  = evalOldModel(p, oldModelName)
+        retNew1D,retNew2D, idxNew1D, idxNew2D  = evalNewModel(p, newModelName)
+        
+        
+#         # 1D
+#         resid, relerr = np.zeros_like(retNew1D), np.zeros_like(retNew1D)
+#         resid[idxOld1D] = (retNew1D - retOld1D)[idxOld1D]
+#         relerr[idxOld1D] = resid[idxOld1D]/retOld1D[idxOld1D]
+#         print "1D max(|ocl-sasview|)", max(abs(resid[idxOld1D])), "\t",
+#         print "1D max(|(ocl-sasview)/ocl|)", max(abs(relerr[idxOld1D]))
+#           
+#         # 2D
+#         resid, relerr = np.zeros_like(retNew2D), np.zeros_like(retNew2D)
+#         resid[idxOld2D] = (retNew2D - retOld2D)[idxOld2D]
+#         relerr[idxOld2D] = resid[idxOld2D]/retOld2D[idxOld2D]
+#         print "2D max(|ocl-sasview|)", max(abs(resid[idxOld2D])), "\t",
+#         print "2D max(|(ocl-sasview)/ocl|)", max(abs(relerr[idxOld2D]))
+         
+        print  "Relative Error: 1D = %.2e :: 2D = %.2e "%(np.max(np.abs(retNew1D - retOld1D)) / np.max(retOld1D),
+                                                   np.max(np.abs(retNew2D - retOld2D)) / np.max(retOld2D))
 
+        print  "MSE: 1D = %.2e :: 2D = %.2e "% ( _mse(retNew1D,retOld1D,None),
+                                            _mse(retNew2D, retOld2D, None))
+
+
+def _mse(A,B,ax):
+    """
+    Mean Squared Error between two matrices
+    with ax=0 the average is performed along the row, for each column, returning an array
+    with ax=1 the average is performed along the column, for each row, returning an array
+    with ax=None the average is performed element-wise along the array, returning a single value
+    """
+    mse = ((A - B) ** 2).mean(axis=ax)
+    return mse
     
-if __name__ == "__main__":
-    testBothModels()     
+if __name__ == "__main__":     
     #testOldModel()
-   # testNewModel()
+    #testNewModel()
+    testBothModels()
     print "DONE!"
