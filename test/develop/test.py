@@ -32,7 +32,7 @@ def evalOldModel(p, modelName):
     modelNIterations = p.getOldModelUniqueCollumValue(modelName,"n_sasview")
     ret1D = model.eval(d.get1DSasView(),nIterations=modelNIterations)
     ret2D = model.eval(d.get2DSasView(),nIterations=modelNIterations)
-    return ret1D,ret2D, d.get1DIndex(), d.get2DIndex()
+    return ret1D,ret2D, d.get2DMask()
     
 def testNewModel():
     
@@ -57,7 +57,7 @@ def evalNewModel(p, modelName):
     
     ret1D = model.eval(d.get1DBumps(), cutoff=modelCutOff, nIterations=modelNIterations)
     ret2D = model.eval(d.get2DBumps(), cutoff=modelCutOff, nIterations=modelNIterations)
-    return ret1D,ret2D, d.get1DIndex(), d.get2DIndex()
+    return ret1D,ret2D, d.get2DMask()
 
 def testBothModels():
     p = Params()
@@ -66,29 +66,29 @@ def testBothModels():
     for oldModelName,newModelName in models:
         print "* Evaluating both Models:",oldModelName, "::", newModelName
         
-        retOld1D,retOld2D, idxOld1D, idxOld2D  = evalOldModel(p, oldModelName)
-        retNew1D,retNew2D, idxNew1D, idxNew2D  = evalNewModel(p, newModelName)
+        retOld1D,retOld2D, idxOld2D  = evalOldModel(p, oldModelName)
+        retNew1D,retNew2D, idxNew2D  = evalNewModel(p, newModelName)
         
         
-#         # 1D
-#         resid, relerr = np.zeros_like(retNew1D), np.zeros_like(retNew1D)
-#         resid[idxOld1D] = (retNew1D - retOld1D)[idxOld1D]
-#         relerr[idxOld1D] = resid[idxOld1D]/retOld1D[idxOld1D]
-#         print "1D max(|ocl-sasview|)", max(abs(resid[idxOld1D])), "\t",
-#         print "1D max(|(ocl-sasview)/ocl|)", max(abs(relerr[idxOld1D]))
-#           
-#         # 2D
-#         resid, relerr = np.zeros_like(retNew2D), np.zeros_like(retNew2D)
-#         resid[idxOld2D] = (retNew2D - retOld2D)[idxOld2D]
-#         relerr[idxOld2D] = resid[idxOld2D]/retOld2D[idxOld2D]
-#         print "2D max(|ocl-sasview|)", max(abs(resid[idxOld2D])), "\t",
-#         print "2D max(|(ocl-sasview)/ocl|)", max(abs(relerr[idxOld2D]))
+        # 1D
+        resid, relerr = np.zeros_like(retNew1D), np.zeros_like(retNew1D)
+        resid = (retNew1D - retOld1D)
+        relerr = resid/retOld1D
+        print "1D max(|ocl-sasview|)", max(abs(resid)), "\t",
+        print "1D max(|(ocl-sasview)/ocl|)", max(abs(relerr))
+        
+        # 2D
+        resid, relerr = np.zeros_like(retNew2D), np.zeros_like(retNew2D)
+        resid[idxOld2D] = (retNew2D - retOld2D)[idxOld2D]
+        relerr[idxOld2D] = resid[idxOld2D]/retOld2D[idxOld2D]
+        print "2D max(|ocl-sasview|)", max(abs(resid[idxOld2D])), "\t",
+        print "2D max(|(ocl-sasview)/ocl|)", max(abs(relerr[idxOld2D]))
          
         print  "Relative Error: 1D = %.2e :: 2D = %.2e "%(np.max(np.abs(retNew1D - retOld1D)) / np.max(retOld1D),
-                                                   np.max(np.abs(retNew2D - retOld2D)) / np.max(retOld2D))
+                                                   np.max(np.abs((retNew2D - retOld2D)[idxOld2D])) / np.max(retOld2D[idxOld2D]))
 
         print  "MSE: 1D = %.2e :: 2D = %.2e "% ( _mse(retNew1D,retOld1D,None),
-                                            _mse(retNew2D, retOld2D, None))
+                                            _mse(retNew2D[idxOld2D], retOld2D[idxOld2D], None))
 
 
 def _mse(A,B,ax):

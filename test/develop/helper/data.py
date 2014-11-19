@@ -53,10 +53,12 @@ class Data(object):
         data = self._get2D(force) 
         return data
     
-    def get1DIndex(self):
+    def get1DMask(self):
+        """ there's no mask for 1d """
         return slice(None, None)
     
-    def get2DIndex(self):
+    def get2DMask(self):
+        """ Inverts the mask so we can index the non masked peaks """
         return ~self.data2D.mask
     
     

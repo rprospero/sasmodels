@@ -6,6 +6,7 @@ Created on Nov 14, 2014
 
 from sasmodels import gpu, dll
 from sasmodels.bumps_model import BumpsModel
+import pprint as pp
 
 class NewModel(object):
     '''

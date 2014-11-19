@@ -59,6 +59,11 @@ CoreShellCylinderModel,core_shell_cylinder,thickness_pd_n,thickness_pd_n,1,,,0.0
 CoreShellCylinderModel,core_shell_cylinder,thickness_pd_nsigma,thickness_pd_nsigma,3,,,0.05,0.00001,single,1,5
 CoreShellCylinderModel,core_shell_cylinder,thickness_pd_type,thickness_pd_type,gaussian,,,0.05,0.00001,single,1,5
 CylinderModel,cylinder,background,background,0,,,0.05,0.00001,single,1,5
+CylinderModel,cylinder,cyl_theta,theta,30,,,0.05,0.00001,single,1,5
+CylinderModel,cylinder,cyl_theta_pd,theta_pd,15,,,0.05,0.00001,single,1,5
+CylinderModel,cylinder,cyl_theta_pd_n,theta_pd_n,45,,,0.05,0.00001,single,1,5
+CylinderModel,cylinder,cyl_theta_pd_nsigma,theta_pd_nsigma,3,,,0.05,0.00001,single,1,5
+CylinderModel,cylinder,cyl_theta_pd_type,theta_pd_type,gaussian,,,0.05,0.00001,single,1,5
 CylinderModel,cylinder,cyl_phi,phi,0,,,0.05,0.00001,single,1,5
 CylinderModel,cylinder,cyl_phi_pd,phi_pd,15,,,0.05,0.00001,single,1,5
 CylinderModel,cylinder,cyl_phi_pd_n,phi_pd_n,1,,,0.05,0.00001,single,1,5
@@ -78,8 +83,8 @@ CylinderModel,cylinder,scale,scale,1,,,0.05,0.00001,single,1,5
 CylinderModel,cylinder,sldCyl,sld,6,,,0.05,0.00001,single,1,5
 CylinderModel,cylinder,sldSolv,solvent_sld,1,,,0.05,0.00001,single,1,5
 EllipsoidModel,ellipsoid,axis_phi,phi,15,,,0.05,0.00001,single,1,5
-EllipsoidModel,ellipsoid,axis_phi_pd,phi_pd,1,,,0.05,0.00001,single,1,5
-EllipsoidModel,ellipsoid,axis_phi_pd_n,phi_pd_n,15,,,0.05,0.00001,single,1,5
+EllipsoidModel,ellipsoid,axis_phi_pd,phi_pd,15,,,0.05,0.00001,single,1,5
+EllipsoidModel,ellipsoid,axis_phi_pd_n,phi_pd_n,1,,,0.05,0.00001,single,1,5
 EllipsoidModel,ellipsoid,axis_phi_pd_nsigma,phi_pd_nsigma,3,,,0.05,0.00001,single,1,5
 EllipsoidModel,ellipsoid,axis_phi_pd_type,phi_pd_type,gaussian,,,0.05,0.00001,single,1,5
 EllipsoidModel,ellipsoid,axis_theta,theta,30,,,0.05,0.00001,single,1,5
@@ -109,6 +114,7 @@ LamellarModel,lamellar,bi_thick_pd_nsigma,thickness_pd_nsigma,3,,,0.05,0.00001,s
 LamellarModel,lamellar,bi_thick_pd_type,thickness_pd_type,gaussian,,,0.05,0.00001,single,1,5
 LamellarModel,lamellar,scale,scale,1,,,0.05,0.00001,single,1,5
 LamellarModel,lamellar,sld_bi,sld,6,,,0.05,0.00001,single,1,5
+LamellarModel,lamellar,sld_sol,solvent_sld,1,,,0.05,0.00001,single,1,5
 SphereModel,sphere,background,background,0,,,0.05,0.00001,single,1,5
 SphereModel,sphere,radius,radius,120,,,0.05,0.00001,single,1,5
 SphereModel,sphere,radius_pd,radius_pd,0.2,,,0.05,0.00001,single,1,5
