@@ -7,8 +7,9 @@ See:
 http://web.mit.edu/yamins/www/tabular/
 
 '''
+
+# Ugly way of importing tab!! TO FIX!
 import os
-from sphinx.util import FilenameUniqDict
 dirname, filename = os.path.split(os.path.abspath(__file__))
 import sys
 sys.path.append(dirname)
@@ -19,7 +20,18 @@ import numpy as np
 from docutils.nodes import row
 from pytools.datatable import Row
 import ast
+from random import uniform
 
+
+def singleton(cls):
+    instances = {}
+    def getinstance():
+        if cls not in instances:
+            instances[cls] = cls()
+        return instances[cls]
+    return getinstance
+
+@singleton
 class Params(object):
     '''
     classdocs
@@ -48,6 +60,15 @@ class Params(object):
     def getNewModelParamNamesAndValues(self,modelName):
         records =  self.data[ self.data['model_new']==modelName ][['param_new','value']].extract()
         return self._fromTabularToDict(records)
+    
+    def getModelsParamNamesAndValuesLimit(self,oldModelName,newModelName):
+        """
+        Returns list of lists with two dictionaries of params for old and new models
+        """
+        records =  self.data[ (self.data['model_old']==oldModelName) & (self.data['model_new']==newModelName) ][['param_old','param_new','value','low','high']].extract()
+        if len(records) == 0:
+            raise ValueError("Problem getting ParamNamesAndValuesLimit: Make sure oldModelName and newModelName are in the same row!")
+        return self._evalFieldsToRandom(records)
     
     def getAllOldModelsNames(self):
         records =  self.data['model_old']
@@ -105,6 +126,41 @@ class Params(object):
             retDic[k]=v
         return retDic
 
+    def _evalFields(self,records):
+        ret = []
+        for row in records:
+            sub = []
+            for i in row:
+                try:
+                    i = ast.literal_eval(i)
+                except:
+                    pass
+                sub.append(i)
+            ret.append(sub)
+        return ret
+    
+    def _evalFieldsToRandom(self,records):
+        """
+        input [ ['param_old','param_new','value','low','high'], ... ]
+        Output {oldParam:value, .. },{newParam : value, }
+        """
+        oldParams = {}
+        newParams = {}
+        for row in records:
+            print row
+            if 'nan' not in row[-1] and 'nan' not in row[-2]:
+                maxValue = ast.literal_eval(row[-1])
+                minValue = ast.literal_eval(row[-2])
+                v = uniform(minValue,maxValue)
+            else:
+                try:
+                    v = ast.literal_eval(row[-3])
+                except:
+                    v = row[-3] # text
+            oldParams[row[0]]=v
+            newParams[row[1]]=v
+        return oldParams, newParams
+    
     def _createNewCsvFileWithPDParams(self, paramsNewToExclude = ['scale', 'background', 'sld', 'solvent_sld', 
                                                                   'core_sld', 'shell_sld', 'solvent_sld' ]):
         """
@@ -167,10 +223,10 @@ class Params(object):
 def test():
     p = Params()
     #print p.data
-    pprint.pprint(p.getOldModelParamValue('CappedCylinderModel','len_cyl'))
-    pprint.pprint(p.getOldModelParamNamesAndValues('CappedCylinderModel'))
-    pprint.pprint(p.getOldModelUniqueCollumValue('CappedCylinderModel','cutoff'))
-    
+    #pprint.pprint(p.getOldModelParamValue('CappedCylinderModel','len_cyl'))
+    #pprint.pprint(p.getOldModelParamNamesAndValuesLimit('CappedCylinderModel'))
+    #pprint.pprint(p.getOldModelUniqueCollumValue('CappedCylinderModel','cutoff'))
+    pprint.pprint(p.getModelsParamNamesAndValuesLimit('CappedCylinderModel', 'capped_cylinder'))
     
     #p._createNewCsvFileWithPDParams()
     
