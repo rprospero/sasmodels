@@ -24,6 +24,10 @@ from random import uniform
 
 
 def singleton(cls):
+    """
+    Poor singleton decorator!
+    Note that super() and classmethods won't work on any class decorated!! 
+    """
     instances = {}
     def getinstance():
         if cls not in instances:
@@ -34,9 +38,8 @@ def singleton(cls):
 @singleton
 class Params(object):
     '''
-    classdocs
+    Interface with the CSV file. 
     '''
-
 
     def __init__(self, csvFilename="defs_pd.csv"):
         '''
@@ -102,7 +105,7 @@ class Params(object):
     
     
     def _getFullPath(self,filename):
-        dirname, pythonfilename = os.path.split(os.path.abspath(__file__))
+        dirname, _ = os.path.split(os.path.abspath(__file__))
         if os.path.isabs(filename):
             if os.path.exists(filename):
                 return filename

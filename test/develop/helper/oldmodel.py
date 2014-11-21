@@ -8,7 +8,7 @@ import pprint as pp
 
 class OldModel(object):
     '''
-    classdocs
+    Loads and builds SasView based models
     '''
 
 
@@ -22,12 +22,6 @@ class OldModel(object):
         
     def _buildModel(self, force=False):
         """
-        pars = {'scale': 1, 'radius_pd_type': 'gaussian', 
-        'sldSph': 6e-06, 'radius_pd_nsigma': 3, 'radius_pd': 0.2, 
-        'radius': 120, 'radius_pd_n': 45, 'background': 0, 'sldSolv': 1e-06}
-        modelname = SphereModel
-        model.dispersion  = {'radius': {'npts': 45, 'type': 'gaussian', 'nsigmas': 3, 'width': 0.2}}
-        
         Build a model
         """
         

@@ -13,7 +13,14 @@ import numpy as np
 import pprint as pp
 
 class Test(unittest.TestCase):
-
+    """
+    Unit test
+    Tests New vs OldModels for the default parameters and random parameters
+    All these values are in the CSV file:
+    'value' - default parameter value
+    ['low','high'] - min and max limits to generate the random value
+    """
+    
     models = None
     p = None
     
@@ -55,9 +62,9 @@ class Test(unittest.TestCase):
             errMax = newModelHelper.getRelativeError1D()
             self.assertLess(err, errMax, "For models: " + oldModelName + " :: "+ newModelName + 
                             " :: ERROR: Obtained: %.2e, Max: %.2e, Absolute: %.2e"%(err, errMax,self._absoluteError(vOld, vNew))+
-                            "\n" + "1D Old: " + pp.pformat(oldModelParams) + "\n1D New: " + pp.pformat(newModelParams) +
-                            "1D VOld: " + pp.pformat(vOld)+
-                            "1D VNew: " + pp.pformat(vNew))
+                            "\n1D Old: " + pp.pformat(oldModelParams) + "\n1D New: " + pp.pformat(newModelParams) +
+                            "\n1D VOld: " + pp.pformat(vOld)+
+                            "\n1D VNew: " + pp.pformat(vNew))
             
     def testModelsStandardParams2D(self):
         for oldModelName,newModelName in self.models:

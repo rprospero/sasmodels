@@ -2,6 +2,11 @@
 Created on Nov 14, 2014
 
 @author: rhf
+
+Dummy class used for test purposes!
+
+The class that perform the tests is utest.py
+
 '''
 
 #import helper.params.Params as Params

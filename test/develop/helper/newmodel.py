@@ -10,13 +10,13 @@ import pprint as pp
 
 class NewModel(object):
     '''
-    classdocs
+    Loads GPU based models from string
     '''
 
 
     def __init__(self, modelname, dtype="single",  **pars):
         '''
-        Constructor
+        
         '''
         self.modelname = modelname
         self.pars = pars
@@ -25,12 +25,6 @@ class NewModel(object):
         
     def _buildModel(self, force=False):
         """
-        pars = {'scale': 1, 'radius_pd_type': 'gaussian', 
-        'sldSph': 6e-06, 'radius_pd_nsigma': 3, 'radius_pd': 0.2, 
-        'radius': 120, 'radius_pd_n': 45, 'background': 0, 'sldSolv': 1e-06}
-        modelname = SphereModel
-        model.dispersion  = {'radius': {'npts': 45, 'type': 'gaussian', 'nsigmas': 3, 'width': 0.2}}
-        
         Build a model
         """
         
@@ -49,8 +43,8 @@ class NewModel(object):
         kernel = gpu.load_model(module, dtype=dtype)
         return kernel
     
-    def getModel(self):
-        self._buildModel()
+    def getModel(self, force=False):
+        self._buildModel(force)
         return self.model
     
     def eval(self,data, cutoff=1e-5, nIterations=5):
