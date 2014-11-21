@@ -19,6 +19,10 @@ python develop/utest.py
 - Random tests are not working as the parameters low and high limit appear to be to large for some models.
 - Also random numbers are generated with ```random.uniform``` which outputs floats. This also must be checked!
 
+**Dummy files to be deleted**
+
+- ```test/develop/test.py```
+- ```test/develop/helper/tmp.py```
 
 
 **Parameters file:**
