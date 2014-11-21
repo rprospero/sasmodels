@@ -10,6 +10,7 @@ from develop.helper.oldmodel import OldModel
 from develop.helper.newmodel import NewModel
 from helper.data import Data
 import numpy as np
+import pprint as pp
 
 class Test(unittest.TestCase):
 
@@ -26,7 +27,7 @@ class Test(unittest.TestCase):
 
     def testModelsStandardParams1D(self):
         for oldModelName,newModelName in self.models:
-            print "* Evaluating both Models:",oldModelName, "::", newModelName
+            print "* testModelsStandardParams1D:",oldModelName, "::", newModelName
             oldModelHelper = OldModelHelper(oldModelName)
             newModelHelper = NewModelHelper(newModelName)
             oldModelHelper.setModel()
@@ -37,18 +38,63 @@ class Test(unittest.TestCase):
             errMax = newModelHelper.getRelativeError1D()
             self.assertLess(err, errMax)#, "For models: " + oldModelName + " :: "+ newModelName)
     
+    def testModelsRandomParams1D(self):
+        for oldModelName,newModelName in self.models:
+            print "* testModelsRandomParams1D:",oldModelName, "::", newModelName
+            
+            p = Params()
+            oldModelParams,newModelParams = p.getModelsParamNamesAndValuesRandom(oldModelName, newModelName) 
+    
+            oldModelHelper = OldModelHelper(oldModelName)
+            newModelHelper = NewModelHelper(newModelName)
+            oldModelHelper.setModel(oldModelParams)
+            newModelHelper.setModel(newModelParams)
+            vOld = oldModelHelper.eval1d()
+            vNew = newModelHelper.eval1d()
+            err = self._relativeError(vOld, vNew)
+            errMax = newModelHelper.getRelativeError1D()
+            self.assertLess(err, errMax, "For models: " + oldModelName + " :: "+ newModelName + 
+                            " :: ERROR: Obtained: %.2e, Max: %.2e, Absolute: %.2e"%(err, errMax,self._absoluteError(vOld, vNew))+
+                            "\n" + "1D Old: " + pp.pformat(oldModelParams) + "\n1D New: " + pp.pformat(newModelParams) +
+                            "1D VOld: " + pp.pformat(vOld)+
+                            "1D VNew: " + pp.pformat(vNew))
+            
     def testModelsStandardParams2D(self):
         for oldModelName,newModelName in self.models:
-            print "* Evaluating both Models:",oldModelName, "::", newModelName
+            print "* testModelsStandardParams2D:",oldModelName, "::", newModelName
             oldModelHelper = OldModelHelper(oldModelName)
             newModelHelper = NewModelHelper(newModelName)
             oldModelHelper.setModel()
             newModelHelper.setModel()
-            vOld,mask = oldModelHelper.eval2d()
-            vNew,mask = newModelHelper.eval2d()
+            vOld, mask = oldModelHelper.eval2d()
+            vNew, mask = newModelHelper.eval2d()
             err = self._relativeError(vOld, vNew,mask)
             errMax = newModelHelper.getRelativeError2D()
             self.assertLess(err, errMax)#, "For models: " + oldModelName + " :: "+ newModelName)
+
+    def testModelsRandomParams2D(self):
+        for oldModelName,newModelName in self.models:
+            print "* testModelsRandomParams2D:",oldModelName, "::", newModelName
+            
+            p = Params()
+            oldModelParams,newModelParams = p.getModelsParamNamesAndValuesRandom(oldModelName, newModelName) 
+    
+            oldModelHelper = OldModelHelper(oldModelName)
+            newModelHelper = NewModelHelper(newModelName)
+            oldModelHelper.setModel(oldModelParams)
+            newModelHelper.setModel(newModelParams)
+            vOld, mask = oldModelHelper.eval2d()
+            vNew, mask = newModelHelper.eval2d()
+            err = self._relativeError(vOld, vNew,mask)
+            errMax = newModelHelper.getRelativeError2D()
+            self.assertLess(err, errMax, "For models: " + oldModelName + " :: "+ newModelName + 
+                            " :: ERROR: Obtained: %.2e, Max: %.2e, Absolute: %.2e"%(err, errMax,self._absoluteError(vOld, vNew,mask))+
+                            "\n2D Old: " + pp.pformat(oldModelParams) + "\n2D New: " + pp.pformat(newModelParams) +
+                            "\n2D VOld: " + pp.pformat(vOld)+
+                            "\n2D VNew: " + pp.pformat(vNew))
+
+
+    
 
         
     def _relativeError(self, value, approx, mask=None ):
@@ -57,6 +103,11 @@ class Test(unittest.TestCase):
         else:
             return np.max(np.abs((value-approx)[mask]/ value[mask]))
             
+    def _absoluteError(self, value, approx, mask=None ):
+        if mask is None:
+            return np.max(np.abs(value-approx))
+        else:
+            return np.max(np.abs((value-approx)[mask]))
             
     
 

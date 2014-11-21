@@ -61,7 +61,7 @@ class Params(object):
         records =  self.data[ self.data['model_new']==modelName ][['param_new','value']].extract()
         return self._fromTabularToDict(records)
     
-    def getModelsParamNamesAndValuesLimit(self,oldModelName,newModelName):
+    def getModelsParamNamesAndValuesRandom(self,oldModelName,newModelName):
         """
         Returns list of lists with two dictionaries of params for old and new models
         """
@@ -147,7 +147,6 @@ class Params(object):
         oldParams = {}
         newParams = {}
         for row in records:
-            print row
             if 'nan' not in row[-1] and 'nan' not in row[-2]:
                 maxValue = ast.literal_eval(row[-1])
                 minValue = ast.literal_eval(row[-2])
@@ -226,7 +225,7 @@ def test():
     #pprint.pprint(p.getOldModelParamValue('CappedCylinderModel','len_cyl'))
     #pprint.pprint(p.getOldModelParamNamesAndValuesLimit('CappedCylinderModel'))
     #pprint.pprint(p.getOldModelUniqueCollumValue('CappedCylinderModel','cutoff'))
-    pprint.pprint(p.getModelsParamNamesAndValuesLimit('CappedCylinderModel', 'capped_cylinder'))
+    pprint.pprint(p.getModelsParamNamesAndValuesRandom('CappedCylinderModel', 'capped_cylinder'))
     
     #p._createNewCsvFileWithPDParams()
     
