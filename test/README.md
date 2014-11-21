@@ -23,7 +23,7 @@ python develop/utest.py
 
 - ```test/develop/test.py```
 - ```test/develop/helper/tmp.py```
-
+- ```test/develop/helper/defs.csv```
 
 **Parameters file:**
 
