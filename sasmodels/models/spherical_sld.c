@@ -1,9 +1,16 @@
-double form_volume(double radius);
+double form_volume(double thick_inter_0, double thick_inter_1, double thick_inter_2,
+    double thick_inter_3, double thick_inter_4, double thick_inter_5,
+    double thick_inter_6, double thick_inter_7, double thick_inter_8,
+    double thick_inter_9, double thick_inter_10,
+    double thick_flat_1, double thick_flat_2, double thick_flat_3, double thick_flat_4,
+    double thick_flat_5, double thick_flat_6, double thick_flat_7, double thick_flat_8,
+    double thick_flat_9, double thick_flat_10,
+    double rad_core_0);
 
 double Iq(double q,
-    int n_shells, double thick_inter_0, int func_inter_0, double sld_core_0, double sld_solv,
-    double sld_flat_1, double sld_flat_2, double sld_flat_3, double sld_flat_4, double sld_flat_5,
-    double sld_flat_6, double sld_flat_7, double sld_flat_8, double sld_flat_9, double sld_flat_10,
+    int n_shells, double thick_inter_0, int func_inter_0, double core0_sld, double solvent_sld,
+    double flat1_sld, double flat2_sld, double flat3_sld, double flat4_sld, double flat5_sld,
+    double flat6_sld, double flat7_sld, double flat8_sld, double flat9_sld, double flat10_sld,
     double thick_inter_1, double thick_inter_2, double thick_inter_3, double thick_inter_4, double thick_inter_5,
     double thick_inter_6, double thick_inter_7, double thick_inter_8, double thick_inter_9, double thick_inter_10,
     double thick_flat_1, double thick_flat_2, double thick_flat_3, double thick_flat_4, double thick_flat_5,
@@ -15,9 +22,9 @@ double Iq(double q,
     int npts_inter, double nu_inter_0, double rad_core_0);
 
 double Iqxy(double qx, double qy,
-    int n_shells, double thick_inter_0, int func_inter_0, double sld_core_0, double sld_solv,
-    double sld_flat_1, double sld_flat_2, double sld_flat_3, double sld_flat_4, double sld_flat_5,
-    double sld_flat_6, double sld_flat_7, double sld_flat_8, double sld_flat_9, double sld_flat_10,
+    int n_shells, double thick_inter_0, int func_inter_0, double core0_sld, double solvent_sld,
+    double flat1_sld, double flat2_sld, double flat3_sld, double flat4_sld, double flat5_sld,
+    double flat6_sld, double flat7_sld, double flat8_sld, double flat9_sld, double flat10_sld,
     double thick_inter_1, double thick_inter_2, double thick_inter_3, double thick_inter_4, double thick_inter_5,
     double thick_inter_6, double thick_inter_7, double thick_inter_8, double thick_inter_9, double thick_inter_10,
     double thick_flat_1, double thick_flat_2, double thick_flat_3, double thick_flat_4, double thick_flat_5,
@@ -28,11 +35,40 @@ double Iqxy(double qx, double qy,
     double nu_inter_6, double nu_inter_7, double nu_inter_8, double nu_inter_9, double nu_inter_10,
     int npts_inter, double nu_inter_0, double rad_core_0);
 
-//TODO: Check what is for volume for this model
-
-double form_volume(double radius)
+//TODO: This function should some up over all rhsells?
+double form_volume(double thick_inter_0, double thick_inter_1, double thick_inter_2,
+    double thick_inter_3, double thick_inter_4, double thick_inter_5,
+    double thick_inter_6, double thick_inter_7, double thick_inter_8,
+    double thick_inter_9, double thick_inter_10,
+    double thick_flat_1, double thick_flat_2, double thick_flat_3, double thick_flat_4,
+    double thick_flat_5, double thick_flat_6, double thick_flat_7, double thick_flat_8,
+    double thick_flat_9, double thick_flat_10,
+    double rad_core_0)
 {
-    //This is normalized for each shell. It is spehere but for each shell
+    double radius = 0.0;
+    radius+=thick_inter_0;
+    radius+=thick_inter_1;
+    radius+=thick_inter_2;
+    radius+=thick_inter_3;
+    radius+=thick_inter_4;
+    radius+=thick_inter_5;
+    radius+=thick_inter_6;
+    radius+=thick_inter_7;
+    radius+=thick_inter_8;
+    radius+=thick_inter_9;
+    radius+=thick_inter_10;
+    radius+=thick_flat_1;
+    radius+=thick_flat_2;
+    radius+=thick_flat_3;
+    radius+=thick_flat_4;
+    radius+=thick_flat_5;
+    radius+=thick_flat_6;
+    radius+=thick_flat_7;
+    radius+=thick_flat_8;
+    radius+=thick_flat_9;
+    radius+=thick_flat_10;
+    radius+=rad_core_0;
+
     double vol = 4.0*M_PI/3.0*pow(radius,3);
     return vol;
 }
@@ -185,7 +221,9 @@ static double sphere_sld_kernel(double dp[], double q) {
     }
   }
   //vol += vol_sub;
-  f2 = f * f / vol * 1.0e8;
+  //f2 = f * f / vol * 1.0e8;
+  //TODO: Check if this right? 10e8 seems to come from sld correction but then why is not 10e12?
+  f2 = f * f / vol;
   f2 *= scale;
   f2 += background;
   //free(fun_type);
@@ -204,9 +242,9 @@ static double sphere_sld_kernel(double dp[], double q) {
  * @return: function value
  */
 double Iq(double q,
-    int n_shells, double thick_inter_0, int func_inter_0, double sld_core_0, double sld_solv,
-    double sld_flat_1, double sld_flat_2, double sld_flat_3, double sld_flat_4, double sld_flat_5,
-    double sld_flat_6, double sld_flat_7, double sld_flat_8, double sld_flat_9, double sld_flat_10,
+    int n_shells, double thick_inter_0, int func_inter_0, double core0_sld, double solvent_sld,
+    double flat1_sld, double flat2_sld, double flat3_sld, double flat4_sld, double flat5_sld,
+    double flat6_sld, double flat7_sld, double flat8_sld, double flat9_sld, double flat10_sld,
     double thick_inter_1, double thick_inter_2, double thick_inter_3, double thick_inter_4, double thick_inter_5,
     double thick_inter_6, double thick_inter_7, double thick_inter_8, double thick_inter_9, double thick_inter_10,
     double thick_flat_1, double thick_flat_2, double thick_flat_3, double thick_flat_4, double thick_flat_5,
@@ -226,20 +264,20 @@ double Iq(double q,
     dp[1] = 1.0;
     dp[2] = thick_inter_0;
     dp[3] = func_inter_0;
-    dp[4] = sld_core_0;
-    dp[5] = sld_solv;
+    dp[4] = core0_sld;
+    dp[5] = solvent_sld;
     dp[6] = 0.0;
 
-    dp[7] = sld_flat_1;
-    dp[8] = sld_flat_2;
-    dp[9] = sld_flat_3;
-    dp[10] = sld_flat_4;
-    dp[11] = sld_flat_5;
-    dp[12] = sld_flat_6;
-    dp[13] = sld_flat_7;
-    dp[14] = sld_flat_8;
-    dp[15] = sld_flat_9;
-    dp[16] = sld_flat_10;
+    dp[7] = flat1_sld;
+    dp[8] = flat2_sld;
+    dp[9] = flat3_sld;
+    dp[10] = flat4_sld;
+    dp[11] = flat5_sld;
+    dp[12] = flat6_sld;
+    dp[13] = flat7_sld;
+    dp[14] = flat8_sld;
+    dp[15] = flat9_sld;
+    dp[16] = flat10_sld;
 
     dp[17] = thick_inter_1;
     dp[18] = thick_inter_2;
@@ -289,7 +327,7 @@ double Iq(double q,
     dp[58] = nu_inter_0;
     dp[59] = rad_core_0;
 
-    intensity = sphere_sld_kernel(dp,q);
+    intensity = 1e-4*sphere_sld_kernel(dp,q);
     //printf("%10d\n",intensity);
     return intensity;
 }
@@ -301,9 +339,9 @@ double Iq(double q,
  * @return: function value
  */
 double Iqxy(double qx, double qy,
-    int n_shells, double thick_inter_0, int func_inter_0, double sld_core_0, double sld_solv,
-    double sld_flat_1, double sld_flat_2, double sld_flat_3, double sld_flat_4, double sld_flat_5,
-    double sld_flat_6, double sld_flat_7, double sld_flat_8, double sld_flat_9, double sld_flat_10,
+    int n_shells, double thick_inter_0, int func_inter_0, double core0_sld, double solvent_sld,
+    double flat1_sld, double flat2_sld, double flat3_sld, double flat4_sld, double flat5_sld,
+    double flat6_sld, double flat7_sld, double flat8_sld, double flat9_sld, double flat10_sld,
     double thick_inter_1, double thick_inter_2, double thick_inter_3, double thick_inter_4, double thick_inter_5,
     double thick_inter_6, double thick_inter_7, double thick_inter_8, double thick_inter_9, double thick_inter_10,
     double thick_flat_1, double thick_flat_2, double thick_flat_3, double thick_flat_4, double thick_flat_5,
@@ -315,9 +353,9 @@ double Iqxy(double qx, double qy,
     int npts_inter, double nu_inter_0, double rad_core_0) {
 
     double q = sqrt(qx*qx + qy*qy);
-    return Iq(q, n_shells, thick_inter_0, func_inter_0, sld_core_0, sld_solv,
-    sld_flat_1, sld_flat_2, sld_flat_3, sld_flat_4, sld_flat_5,
-    sld_flat_6, sld_flat_7, sld_flat_8, sld_flat_9, sld_flat_10,
+    return Iq(q, n_shells, thick_inter_0, func_inter_0, core0_sld, solvent_sld,
+    flat1_sld, flat2_sld, flat3_sld, flat4_sld, flat5_sld,
+    flat6_sld, flat7_sld, flat8_sld, flat9_sld, flat10_sld,
     thick_inter_1, thick_inter_2, thick_inter_3, thick_inter_4, thick_inter_5,
     thick_inter_6, thick_inter_7, thick_inter_8, thick_inter_9, thick_inter_10,
     thick_flat_1, thick_flat_2, thick_flat_3, thick_flat_4, thick_flat_5,
