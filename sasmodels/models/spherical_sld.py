@@ -1,4 +1,5 @@
-#TODO: Documentation is half-ready but have to check original reference
+#TODO: Documentation is half-ready.
+# Have to check original reference for formulas
 r"""
 This model calculates an empirical functional form for SAS data using SpericalSLD profile
 
