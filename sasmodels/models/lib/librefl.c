@@ -1,6 +1,7 @@
 double err_mod_func(double n_sub, double ind, double nu);
 double linearfunc(double n_sub, double ind, double nu);
 double power_r(double n_sub, double ind, double nu);
+double power_l(double n_sub, double ind, double nu);
 double exp_r(double n_sub, double ind, double nu);
 double exp_l(double n_sub, double ind, double nu);
 double intersldfunc(int fun_type, double n_sub, double i, double nu, double sld_l, double sld_r);
@@ -24,7 +25,7 @@ double err_mod_func(double n_sub, double ind, double nu)
 {
   double center, func;
   if (nu == 0.0)
-		nu = 1e-14;
+		nu = 1.0e-14;
 	if (n_sub == 0.0)
 		n_sub = 1.0;
 
@@ -63,7 +64,7 @@ double power_r(double n_sub, double ind, double nu)
 {
   double bin_size,func;
 	if (nu == 0.0)
-		nu = 1e-14;
+		nu = 1.0e-14;
 	if (n_sub == 0.0)
 		n_sub = 1.0;
 
@@ -79,7 +80,7 @@ double power_l(double n_sub, double ind, double nu)
 {
   double bin_size, func;
 	if (nu == 0.0)
-		nu = 1e-14;
+		nu = 1.0e-14;
 	if (n_sub == 0.0)
 		n_sub = 1.0;
 
@@ -95,7 +96,7 @@ double exp_r(double n_sub, double ind, double nu)
 {
   double bin_size, func;
 	if (nu == 0.0)
-		nu = 1e-14;
+		nu = 1.0e-14;
 	if (n_sub == 0.0)
 		n_sub = 1.0;
 
@@ -115,7 +116,7 @@ double exp_l(double n_sub, double ind, double nu)
 {
   double bin_size, func;
 	if (nu == 0.0)
-		nu = 1e-14;
+		nu = 1.0e-14;
 	if (n_sub == 0.0)
 		n_sub = 1.0;
 
@@ -137,7 +138,7 @@ double intersldfunc(int fun_type, double n_sub, double i, double nu, double sld_
 	double sld_i, func;
 	// this condition protects an error from the singular point
 	if (nu == 0.0){
-		nu = 1e-13;
+		nu = 1.0e-13;
 	}
 	// select func
 	switch(fun_type){
