@@ -236,6 +236,12 @@ def parameter_range(p, v):
     elif p == 'case_num':
         # RPA hack
         return [0, 10]
+    elif p == 'n_shells':
+        # Spherical_SLD hack
+        return [0, 11]
+    elif p.startswith('func_inter'):
+        # Spherical_SLD hack
+        return [0, 5]
     elif v < 0:
         # Kxy parameters in rpa model can be negative
         return [2*v, -2*v]

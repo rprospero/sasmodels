@@ -160,6 +160,20 @@ def constrain_new_to_old(model_definition, pars):
         pars['background'] = 0
     elif name == 'rpa':
         pars['case_num'] = int(pars['case_num'])
+    elif name == 'spherical_sld':
+        pars['n_shells'] = int(pars['n_shells'])
+        pars['func_inter_0'] = int(pars['func_inter_0'])
+        pars['func_inter_1'] = int(pars['func_inter_1'])
+        pars['func_inter_2'] = int(pars['func_inter_2'])
+        pars['func_inter_3'] = int(pars['func_inter_3'])
+        pars['func_inter_4'] = int(pars['func_inter_4'])
+        pars['func_inter_5'] = int(pars['func_inter_5'])
+        pars['func_inter_6'] = int(pars['func_inter_6'])
+        pars['func_inter_7'] = int(pars['func_inter_7'])
+        pars['func_inter_8'] = int(pars['func_inter_8'])
+        pars['func_inter_9'] = int(pars['func_inter_9'])
+        pars['func_inter_10'] = int(pars['func_inter_10'])
+        pars['npts_inter'] = 35.0
     elif getattr(model_definition, 'category', None) == 'structure-factor':
         pars['scale'], pars['background'] = 1, 0
 

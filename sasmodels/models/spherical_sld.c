@@ -1,3 +1,4 @@
+//Headers
 double form_volume(double thick_inter_0, double thick_inter_1, double thick_inter_2,
     double thick_inter_3, double thick_inter_4, double thick_inter_5,
     double thick_inter_6, double thick_inter_7, double thick_inter_8,
@@ -35,6 +36,7 @@ double Iqxy(double qx, double qy,
     double nu_inter_6, double nu_inter_7, double nu_inter_8, double nu_inter_9, double nu_inter_10,
     int npts_inter, double nu_inter_0, double rad_core_0);
 
+//Main code
 //TODO: This function should some up over all rhsells?
 double form_volume(double thick_inter_0, double thick_inter_1, double thick_inter_2,
     double thick_inter_3, double thick_inter_4, double thick_inter_5,
@@ -120,7 +122,8 @@ static double sphere_sld_kernel(double dp[], double q) {
     thick[i] = dp[i+26];
     fun_type[i] = dp[i+36];
     fun_coef[i] = fabs(dp[i+46]);
-    total_thick += thick[i] + thick_inter[i];
+    total_thick += thick[i];
+    total_thick += thick_inter[i];
   }
   sld[0] = sld_core;
   sld[n+1] = sld_solv;
@@ -129,7 +132,6 @@ static double sphere_sld_kernel(double dp[], double q) {
   thick_inter[0] = thick_inter_core;
   thick_inter[n+1] = 0.0;
   fun_coef[n+1] = 0.0;
-
   pi = 4.0*atan(1.0);
   f = 0.0;
   r = 0.0;
@@ -199,10 +201,7 @@ static double sphere_sld_kernel(double dp[], double q) {
           else{
             // for flat sub-layer
             //TODO: Single precision calculation most likely fails here
-            //bes = sign *  3.0 * (sin(qr) - qr * cos(qr)) / (qr * qr * qr);
-            //bes = sign *  3.0 * (sin(qr)/qr -  cos(qr));
-            //bes /= (qr*qr);
-            // with linear slope
+            bes = sign *  3.0 * (sin(qr) - qr * cos(qr)) / (qr * qr * qr);
             if (fabs(slope) > 0.0 ){
               fun = sign * 3.0 * r * (2.0*qr*sin(qr)-((qr*qr)-2.0)*cos(qr))/(qr * qr * qr * qr);
             }
@@ -214,7 +213,6 @@ static double sphere_sld_kernel(double dp[], double q) {
           if (qr!= 0.0 && fabs(slope) > 0.0 ){
             fun = sign * 3.0 * r * (2.0*qr*sin(qr)-((qr*qr)-2.0)*cos(qr))/(qr * qr * qr * qr);
           }
-
 
           // update total volume
           vol = 4.0 * pi / 3.0 * r * r * r;
@@ -234,10 +232,9 @@ static double sphere_sld_kernel(double dp[], double q) {
     }
   }
   //vol += vol_sub;
-  //f2 = f * f / vol * 1.0e8;
   f2 = f * f / vol;
-  f2 *= scale;
-  f2 += background;
+  //f2 *= scale;
+  //f2 += background;
   //free(fun_type);
   //free(sld);
   //free(thick_inter);

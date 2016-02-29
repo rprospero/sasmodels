@@ -65,7 +65,6 @@ description = """
         """
 category = "shere-based"
 
-
 # pylint: disable=bad-whitespace, line-too-long
 #            ["name", "units", default, [lower, upper], "type", "description"],
 parameters = [["n_shells",        "",               1,      [0, 9],         "", "number of shells"],
@@ -118,12 +117,12 @@ parameters = [["n_shells",        "",               1,      [0, 9],         "", 
               ["nu_inter_3",        "",             2.5,    [-inf, inf],    "", "steepness parameter"],
               ["nu_inter_4",        "",             2.5,    [-inf, inf],    "", "steepness parameter"],
               ["nu_inter_5",        "",             2.5,    [-inf, inf],    "", "steepness parameter"],
-              ["nu_inter_6",        "",             2.5,     [-inf, inf],   "", "steepness parameter"],
+              ["nu_inter_6",        "",             2.5,    [-inf, inf],   "", "steepness parameter"],
               ["nu_inter_7",        "",             2.5,    [-inf, inf],    "", "steepness parameter"],
               ["nu_inter_8",        "",             2.5,    [-inf, inf],    "", "steepness parameter"],
               ["nu_inter_9",        "",             2.5,    [-inf, inf],    "", "steepness parameter"],
               ["nu_inter_10",       "",             2.5,    [-inf, inf],    "", "steepness parameter"],
-              ["npts_inter",        "",             35,     [0, inf],       "", "number of points in each sublayer"],
+              ["npts_inter",        "",             35,     [0, 35],        "", "number of points in each sublayer Must be odd number"],
               ["nu_inter_0",        "",             2.5,    [-inf, inf],    "", "steepness parameter"],
               ["rad_core_0",        "Ang",          50.0,   [0, inf],    "", "intern layer thickness"],
               ]
