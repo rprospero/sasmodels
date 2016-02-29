@@ -1,4 +1,5 @@
-#TODO: Documentation is half-ready but have to check original reference
+#TODO: Documentation is half-ready.
+# Have to check original reference for formulas
 r"""
 This model calculates an empirical functional form for SAS data using SpericalSLD profile
 
@@ -127,7 +128,7 @@ parameters = [["n_shells",        "",               1,      [0, 9],         "", 
               ["rad_core_0",        "Ang",          50.0,   [0, inf],    "", "intern layer thickness"],
               ]
 # pylint: enable=bad-whitespace, line-too-long
-source = ["lib/librefl.c", "spherical_sld.c"]
+source = ["lib/librefl.c", "lib/Si.c", "spherical_sld.c"]
 
 
 #TODO: Not clear if dispersion function is needed
@@ -160,8 +161,8 @@ def ER(radius):
 
         return radius
 
-demo = dict(scale=1, background=0.0,
-        n_shells=10,
+demo = dict(scale=1.0, background=0.0,
+        n_shells=10.0,
         solvent_sld=1.0,
         npts_inter=35.0,
         func_inter_0=0,
@@ -284,6 +285,7 @@ oldpars = dict(
         flat10_sld='sld_flat10',
         thick_flat_10='thick_flat10')
 
+#TODO: Not working yet
 tests = [
     # Accuracy tests based on content in test/utest_extra_models.py
     [{'npts_iter':35,

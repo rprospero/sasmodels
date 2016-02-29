@@ -191,18 +191,31 @@ static double sphere_sld_kernel(double dp[], double q) {
           }
           qr = q * r;
           fun = 0.0;
-          if(qr == 0.0){
+
+          /*if(qr == 0.0){
             // sigular point
             bes = sign * 1.0;
           }
           else{
             // for flat sub-layer
-            bes = sign *  3.0 * (sin(qr) - qr * cos(qr)) / (qr * qr * qr);
+            //TODO: Single precision calculation most likely fails here
+            //bes = sign *  3.0 * (sin(qr) - qr * cos(qr)) / (qr * qr * qr);
+            //bes = sign *  3.0 * (sin(qr)/qr -  cos(qr));
+            //bes /= (qr*qr);
             // with linear slope
             if (fabs(slope) > 0.0 ){
               fun = sign * 3.0 * r * (2.0*qr*sin(qr)-((qr*qr)-2.0)*cos(qr))/(qr * qr * qr * qr);
             }
+          }*/
+
+          //Some initial optimization tries
+          bes = (qr == 0.0 ? sign * 1.0 : sign *  3.0 * (sin(qr) - qr * cos(qr)) / (qr * qr * qr));
+          //TODO: Will have to chnage this function
+          if (qr!= 0.0 && fabs(slope) > 0.0 ){
+            fun = sign * 3.0 * r * (2.0*qr*sin(qr)-((qr*qr)-2.0)*cos(qr))/(qr * qr * qr * qr);
           }
+
+
           // update total volume
           vol = 4.0 * pi / 3.0 * r * r * r;
           // we won't do the following volume correction for now.
@@ -213,7 +226,7 @@ static double sphere_sld_kernel(double dp[], double q) {
           f += vol * (bes * contr + fun * slope);
         }
         // remember this sld as sld_f
-        sld_f =sld_i;
+        sld_f = sld_i;
         // no sub-layer iteration (n_s loop) for the flat layer
         if (j==0)
           break;
@@ -222,7 +235,6 @@ static double sphere_sld_kernel(double dp[], double q) {
   }
   //vol += vol_sub;
   //f2 = f * f / vol * 1.0e8;
-  //TODO: Check if this right? 10e8 seems to come from sld correction but then why is not 10e12?
   f2 = f * f / vol;
   f2 *= scale;
   f2 += background;
@@ -327,7 +339,7 @@ double Iq(double q,
     dp[58] = nu_inter_0;
     dp[59] = rad_core_0;
 
-    intensity = 1e-4*sphere_sld_kernel(dp,q);
+    intensity = 1.0e-4*sphere_sld_kernel(dp,q);
     //printf("%10d\n",intensity);
     return intensity;
 }
@@ -365,6 +377,8 @@ double Iqxy(double qx, double qy,
     nu_inter_1, nu_inter_2, nu_inter_3, nu_inter_4, nu_inter_5,
     nu_inter_6, nu_inter_7, nu_inter_8, nu_inter_9, nu_inter_10,
     npts_inter, nu_inter_0, rad_core_0);
+
+    //TODO: Check if evalute rphi is not needed?
 
 }
 
