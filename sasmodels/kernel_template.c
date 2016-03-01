@@ -87,6 +87,9 @@
 #ifndef M_PI_4
 #  define M_PI_4 0.7853981633974483
 #endif
+#ifndef M_E
+#  define M_E 2.718281828459045091
+#endif
 
 // Non-standard function library
 // pi/180, used for converting between degrees and radians
@@ -98,10 +101,11 @@
 #ifndef M_4PI_3
 #  define M_4PI_3 4.18879020478639
 #endif
-inline double square(double x) { return pow(x,2.0); }
+//inline double square(double x) { return pow(x,2.0); }
 //inline double square(double x) { return pown(x,2); }
-//inline double square(x) { return x*x; }
+inline double square(double x) { return x*x; }
 inline double cube(double x) { return x*x*x; }
+inline double sinc(double x) { return x==0 ? 1.0 : sin(x)/x; }
 
 
 %(DEFINES)s
