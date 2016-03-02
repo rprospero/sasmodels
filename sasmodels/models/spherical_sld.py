@@ -160,9 +160,11 @@ def ER(radius):
 
         return radius
 
-demo = dict(scale=1.0, background=0.0,
-        n_shells=10.0,
+demo = dict(
+        n_shells=4,
+        scale=1.0,
         solvent_sld=1.0,
+        background=0.0,
         npts_inter=35.0,
         func_inter_0=0,
         nu_inter_0=2.5,
@@ -223,13 +225,13 @@ demo = dict(scale=1.0, background=0.0,
 
 oldname = "SphereSLDModel"
 oldpars = dict(
-        scale="scale",
-        background="background",
         n_shells="n_shells",
+        scale="scale",
         npts_inter='npts_inter',
         solvent_sld='sld_solv',
         func_inter_0='func_inter0',
         nu_inter_0='nu_inter0',
+        background='background',
         rad_core_0='rad_core0',
         core0_sld='sld_core0',
         thick_inter_0='thick_inter0',

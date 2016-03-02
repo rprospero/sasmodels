@@ -194,7 +194,7 @@ static double sphere_sld_kernel(double dp[], double q) {
           qr = q * r;
           fun = 0.0;
 
-          /*if(qr == 0.0){
+          if(qr == 0.0){
             // sigular point
             bes = sign * 1.0;
           }
@@ -205,14 +205,14 @@ static double sphere_sld_kernel(double dp[], double q) {
             if (fabs(slope) > 0.0 ){
               fun = sign * 3.0 * r * (2.0*qr*sin(qr)-((qr*qr)-2.0)*cos(qr))/(qr * qr * qr * qr);
             }
-          }*/
+          }
 
           //Some initial optimization tries
-          bes = (qr == 0.0 ? sign * 1.0 : sign *  3.0 * (sin(qr) - qr * cos(qr)) / (qr * qr * qr));
+          /*bes = (qr == 0.0 ? sign * 1.0 : sign *  3.0 * (sin(qr) - qr * cos(qr)) / (qr * qr * qr));
           //TODO: Will have to chnage this function
           if (qr!= 0.0 && fabs(slope) > 0.0 ){
             fun = sign * 3.0 * r * (2.0*qr*sin(qr)-((qr*qr)-2.0)*cos(qr))/(qr * qr * qr * qr);
-          }
+          }*/
 
           // update total volume
           vol = 4.0 * pi / 3.0 * r * r * r;
