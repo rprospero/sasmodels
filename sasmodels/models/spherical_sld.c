@@ -201,9 +201,11 @@ static double sphere_sld_kernel(double dp[], double q) {
           else{
             // for flat sub-layer
             //TODO: Single precision calculation most likely fails here
-            bes = sign *  3.0 * (sin(qr) - qr * cos(qr)) / (qr * qr * qr);
+            //bes = sign *  3.0 * (sin(qr) - qr * cos(qr)) / (qr * qr * qr);
+            bes = sign *  sph_j1c(qr);
             if (fabs(slope) > 0.0 ){
-              fun = sign * 3.0 * r * (2.0*qr*sin(qr)-((qr*qr)-2.0)*cos(qr))/(qr * qr * qr * qr);
+              //fun = sign * 3.0 * r * (2.0*qr*sin(qr)-((qr*qr)-2.0)*cos(qr))/(qr * qr * qr * qr);
+              fun = sign * r * sph_j1c(qr)  +  sign * 3.0 * sin(qr)/(qr * qr * q ) + sign * 6.0 * cos(qr)/(qr * qr * qr * q);
             }
           }
 

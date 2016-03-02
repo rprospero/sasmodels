@@ -27,9 +27,11 @@ The scattering intensity $I(q)$ in 1D is calculated as:
 
 where, for a spherically symmetric particle with a particle density \rho(r)
 
+.. math::
 
-The scaling of the second power law region (coefficent C) is then automatically scaled to
-match the first by following formula
+    f = 4\pi \int_{0}^{\infty} \rho(r) \frac{sin(qr){qr^2}r^2 dr
+
+so that
 
 .. math::
     C = \frac{A}{qc^{-m1} qc^{-m2}}
@@ -127,7 +129,7 @@ parameters = [["n_shells",        "",               1,      [0, 9],         "", 
               ["rad_core_0",        "Ang",          50.0,   [0, inf],    "", "intern layer thickness"],
               ]
 # pylint: enable=bad-whitespace, line-too-long
-source = ["lib/librefl.c", "lib/Si.c", "spherical_sld.c"]
+source = ["lib/librefl.c",  "lib/sph_j1c.c", "spherical_sld.c"]
 
 
 #TODO: Not clear if dispersion function is needed
