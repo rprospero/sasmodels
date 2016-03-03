@@ -1,5 +1,3 @@
-#TODO: Documentation is half-ready.
-# Have to check original reference for formulas
 r"""
 This model calculates an empirical functional form for SAS data using SpericalSLD profile
 
@@ -9,15 +7,20 @@ including error, power-law, and exponential functions. This model is to calculat
 by building a continuous custom SLD profile against the radius of the particle. The SLD profile is composed
 of a flat core, a flat solvent, a number (up to 9 ) flat shells, and the interfacial layers between
 the adjacent flat shells (or core, and solvent) (see below).
+
+.. figure:: img/spherical_sld_profile.gif
+
+    Exemplary SLD profile
+
 Unlike the OnionExpShellModel (using an analytical integration),
 the interfacial layers here are sub-divided and numerically integrated assuming each of the sub-layers are described
-by a line function. The number of the sub-layer can be given by users by setting the integer values of npts_inter
-in the GUI. The form factor is normalized by the total volume of the sphere.
+by a line function. The number of the sub-layer can be given by users by setting the integer values of npts_inter.
+The form factor is normalized by the total volume of the sphere.
 
 Definition
 ----------
 
-The form factor $P(q)$ in 1D is calculated as:
+The form factor $P(q)$ in 1D is calculated by:
 
 .. math::
 
@@ -25,7 +28,7 @@ The form factor $P(q)$ in 1D is calculated as:
     f = f_\text{core} + \sum_{\text{inter}_i=0}^N f_{\text{inter}_i} +
     \sum_{\text{flat}_i=0}^N f_{\text{flat}_i} +f_\text{solvent}
 
-For a spherically symmetric particle with a particle density $\rho_x(r)$
+For a spherically symmetric particle with a particle density $\rho_x(r)$ the sld function can be defined as:
 
 .. math::
 
@@ -41,7 +44,7 @@ so that individual terms can be calcualted as follows:
 
     f_{\text{inter}_i} = 4 \pi \int_{\Delta t_{ \text{inter}_i } } \rho_{ \text{inter}_i } \frac{\sin(qr)} {qr} r^2 dr
 
-    f_{\text{shell}_i} = 4 \pi \int_{\Delta t_{ \text{flat}_i } } \rho_{ \text{flat}_i } \frac{\sin(qr)} {qr} r^2 dr =
+    f_{\text{shell}_i} = 4 \pi \int_{\Delta t_{ \text{inter}_i } } \rho_{ \text{flat}_i } \frac{\sin(qr)} {qr} r^2 dr =
     3 \rho_{ \text{flat}_i } V ( r_{ \text{inter}_i } + \Delta t_{ \text{inter}_i } )
     \Big[ \frac{\sin(qr_{\text{inter}_i} + \Delta t_{ \text{inter}_i } ) - q (r_{\text{inter}_i} +
     \Delta t_{ \text{inter}_i }) \cos(q( r_{\text{inter}_i} + \Delta t_{ \text{inter}_i } ) ) }
@@ -128,10 +131,6 @@ Finally form factor can be calculated by
 .. math::
 
     P(q) = \frac{[f]^2} {V_\text{particle}} \text{where} V_\text{particle} = V(r_{\text{shell}_N})
-
-.. figure:: img/spherical_sld_profile.gif
-
-    Exemplary SLD profile
 
 For 2D data the scattering intensity is calculated in the same way as 1D,
 where the $q$ vector is defined as
