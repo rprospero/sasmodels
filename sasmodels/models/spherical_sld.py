@@ -17,27 +17,121 @@ in the GUI. The form factor is normalized by the total volume of the sphere.
 Definition
 ----------
 
-The scattering intensity $I(q)$ in 1D is calculated as:
+The form factor $P(q)$ in 1D is calculated as:
 
 .. math::
 
-    P(q) = \frac{f^2}{V_\text{particle}}
-    f = f_\text{core} + \sum_{\text{inter}_i=0}^N f_text{inter}_i +
-    \sum_{\text{flat}_i=0}^N f_text{flat}_i +f_\text{solvent}
+    P(q) = \frac{f^2}{V_\text{particle}} \text{ where }
+    f = f_\text{core} + \sum_{\text{inter}_i=0}^N f_{\text{inter}_i} +
+    \sum_{\text{flat}_i=0}^N f_{\text{flat}_i} +f_\text{solvent}
 
-where, for a spherically symmetric particle with a particle density \rho(r)
+For a spherically symmetric particle with a particle density $\rho_x(r)$
+
+.. math::
+
+    f_x = 4 \pi \int_{0}^{\infty} \rho_x(r)  \frac{\sin(qr)} {qr^2} r^2 dr
+
+
+so that individual terms can be calcualted as follows:
+
+.. math::
+    f_\text{core} = 4 \pi \int_{0}^{r_\text{core}} \rho_\text{core} \frac{\sin(qr)} {qr} r^2 dr =
+    3 \rho_\text{core} V(r_\text{core})
+    \Big[ \frac{\sin(qr_\text{core}) - qr_\text{core} \cos(qr_\text{core})} {qr_\text{core}^3} \Big]
+
+    f_{\text{inter}_i} = 4 \pi \int_{\Delta t_{ \text{inter}_i } } \rho_{ \text{inter}_i } \frac{\sin(qr)} {qr} r^2 dr
+
+    f_{\text{shell}_i} = 4 \pi \int_{\Delta t_{ \text{flat}_i } } \rho_{ \text{flat}_i } \frac{\sin(qr)} {qr} r^2 dr =
+    3 \rho_{ \text{flat}_i } V ( r_{ \text{inter}_i } + \Delta t_{ \text{inter}_i } )
+    \Big[ \frac{\sin(qr_{\text{inter}_i} + \Delta t_{ \text{inter}_i } ) - q (r_{\text{inter}_i} +
+    \Delta t_{ \text{inter}_i }) \cos(q( r_{\text{inter}_i} + \Delta t_{ \text{inter}_i } ) ) }
+    {q ( r_{\text{inter}_i} + \Delta t_{ \text{inter}_i } )^3 }  \Big]
+    -3 \rho_{ \text{flat}_i } V(r_{ \text{inter}_i })
+    \Big[ \frac{\sin(qr_{\text{inter}_i}) - qr_{\text{flat}_i} \cos(qr_{\text{inter}_i}) } {qr_{\text{inter}_i}^3} \Big]
+
+    f_\text{solvent} = 4 \pi \int_{r_N}^{\infty} \rho_\text{solvent} \frac{\sin(qr)} {qr} r^2 dr =
+    3 \rho_\text{solvent} V(r_N)
+    \Big[ \frac{\sin(qr_N) - qr_N \cos(qr_N)} {qr_N^3} \Big]
+
+
+Here we assumed that the SLDs of the core and solvent are constant against $r$.
+The SLD at the interface between shells, $\rho_{\text {inter}_i}$
+is calculated with a function chosen by an user, where the functions are
+
+Exp:
+
+.. math::
+    \rho_{{inter}_i} (r) = \begin{cases}
+    B \exp\Big( \frac {\pm A(r - r_{\text{flat}_i})} {\Delta t_{ \text{inter}_i }} \Big) +C  & \text{for} A \neq 0 \\
+    B \Big( \frac {(r - r_{\text{flat}_i})} {\Delta t_{ \text{inter}_i }} \Big) +C  & \text{for} A = 0 \\
+    \end{cases}
+
+Power-Law
+
+.. math::
+    \rho_{{inter}_i} (r) = \begin{cases}
+    \pm B \Big( \frac {(r - r_{\text{flat}_i} )} {\Delta t_{ \text{inter}_i }} \Big) ^A  +C  & \text{for} A \neq 0 \\
+    \rho_{\text{flat}_{i+1}}  & \text{for} A = 0 \\
+    \end{cases}
+
+Erf:
+
+.. math::
+    \rho_{{inter}_i} (r) = \begin{cases}
+    B \text{erf} \Big( \frac { A(r - r_{\text{flat}_i})} {\sqrt{2} \Delta t_{ \text{inter}_i }} \Big) +C  & \text{for} A \neq 0 \\
+    B \Big( \frac {(r - r_{\text{flat}_i} )} {\Delta t_{ \text{inter}_i }} \Big)  +C  & \text{for} A = 0 \\
+    \end{cases}
+
+The functions are normalized so that they vary between 0 and 1, and they are constrained such that the SLD
+is continuous at the boundaries of the interface as well as each sub-layers. Thus B and C are determined.
+
+Once $\rho_{\text{inter}_i}$ is found at the boundary of the sub-layer of the interface, we can find its contribution
+to the form factor $P(q)$
+
+.. math::
+    f_{\text{inter}_i} = 4 \pi \int_{\Delta t_{ \text{inter}_i } } \rho_{ \text{inter}_i } \frac{\sin(qr)} {qr} r^2 dr =
+    4 \pi \sum_{j=0}^{npts_{\text{inter}_i} -1 }
+    \int_{r_j}^{r_{j+1}} \rho_{ \text{inter}_i } (r_j) \frac{\sin(qr)} {qr} r^2 dr \approx
+
+    4 \pi \sum_{j=0}^{npts_{\text{inter}_i} -1 } \Big[
+    3 ( \rho_{ \text{inter}_i } ( r_{j+1} ) - \rho_{ \text{inter}_i } ( r_{j} ) V ( r_{ \text{sublayer}_j } )
+    \Big[ \frac {r_j^2 \beta_\text{out}^2 \sin(\beta_\text{out}) - (\beta_\text{out}^2-2) \cos(\beta_\text{out}) }
+    {\beta_\text{out}^4 } \Big]
+
+    - 3 ( \rho_{ \text{inter}_i } ( r_{j+1} ) - \rho_{ \text{inter}_i } ( r_{j} ) V ( r_{ \text{sublayer}_j-1 } )
+    \Big[ \frac {r_{j-1}^2 \sin(\beta_\text{in}) - (\beta_\text{in}^2-2) \cos(\beta_\text{in}) }
+    {\beta_\text{in}^4 } \Big]
+
+    + 3 \rho_{ \text{inter}_i } ( r_{j+1} )  V ( r_j )
+    \Big[ \frac {\sin(\beta_\text{out}) - \cos(\beta_\text{out}) }
+    {\beta_\text{out}^4 } \Big]
+
+    - 3 \rho_{ \text{inter}_i } ( r_{j} )  V ( r_j )
+    \Big[ \frac {\sin(\beta_\text{in}) - \cos(\beta_\text{in}) }
+    {\beta_\text{in}^4 } \Big]
+    \Big]
+
+where
+
+.. math::
+    V(a) = \frac {4\pi}{3}a^3
+
+    a_\text{in} ~ \frac{r_j}{r_{j+1} -r_j} \text{, } a_\text{out} ~ \frac{r_{j+1}}{r_{j+1} -r_j}
+
+    \beta_\text{in} = qr_j \text{, } \beta_\text{out} = qr_{j+1}
+
+
+We assume the $\rho_{\text{inter}_i} (r)$ can be approximately linear within a sub-layer $j$
+
+Finally form factor can be calculated by
 
 .. math::
 
-    f = 4\pi \int_{0}^{\infty} \rho(r) \frac{sin(qr){qr^2}r^2 dr
+    P(q) = \frac{[f]^2} {V_\text{particle}} \text{where} V_\text{particle} = V(r_{\text{shell}_N})
 
-so that
+.. figure:: img/spherical_sld_profile.gif
 
-.. math::
-    C = \frac{A}{qc^{-m1} qc^{-m2}}
-
-.. note::
-    Be sure to enter the power law exponents as positive values!
+    Exemplary SLD profile
 
 For 2D data the scattering intensity is calculated in the same way as 1D,
 where the $q$ vector is defined as
@@ -47,9 +141,16 @@ where the $q$ vector is defined as
     q = \sqrt{q_x^2 + q_y^2}
 
 
-.. figure:: img/two_power_law_1d.jpg
+.. figure:: img/spherical_sld_1d.jpg
 
-    1D plot using the default values (w/500 data point).
+    1D plot using the default values (w/400 data point).
+
+.. figure:: img/spherical_sld_default_profile.jpg
+
+    SLD profile from the default values.
+
+.. note::
+    The outer most radius is used as the effective radius for S(Q) when $P(Q) * S(Q)$ is applied.
 
 References
 ----------
@@ -65,7 +166,7 @@ description = """
             I(q) =
                background = Incoherent background [1/cm]
         """
-category = "shere-based"
+category = "sphere-based"
 
 # pylint: disable=bad-whitespace, line-too-long
 #            ["name", "units", default, [lower, upper], "type", "description"],
