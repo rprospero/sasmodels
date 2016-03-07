@@ -231,36 +231,45 @@ parameters = [["n_shells",        "",               1,      [0, 9],         "", 
 # pylint: enable=bad-whitespace, line-too-long
 source = ["lib/librefl.c",  "lib/sph_j1c.c", "spherical_sld.c"]
 
+def ER( rad_core_0, thinck_inter_0,
+        thick_flat_1, thinck_inter_1,
+        thick_flat_2, thinck_inter_2,
+        thick_flat_3, thinck_inter_3,
+        thick_flat_4, thinck_inter_4,
+        thick_flat_5, thinck_inter_5,
+        thick_flat_6, thinck_inter_6,
+        thick_flat_7, thinck_inter_7,
+        thick_flat_8, thinck_inter_8,
+        thick_flat_9, thinck_inter_9,
+        thick_flat_10, thinck_inter_10):
 
-#TODO: Not clear if dispersion function is needed
-#def _set_dispersion(self):
-#        """
-#        Setting dispersion for all shells
-#        """
-#        ##set dispersion from model
-#        for name , value in self.model.dispersion.iteritems():
-#
-#            nshell = -1
-#            if name.split('_')[0] == 'thick':
-#                while nshell < 1:
-#                    nshell += 1
-#                    if name.split('_')[1] == 'inter%s' % str(nshell):
-#                        self.dispersion[name] = value
-#                    else:
-#                        continue
-#            else:
-#                self.dispersion[name] = value
-
-
-def ER(radius):
         """
         Calculate the effective radius for P(q)*S(q)
-        Tale different radius values from corresponding shells
-
         :return: the value of the effective radius
         """
 
+        radius = 0.0
+        radius+=rad_core_0 + thinck_inter_0
+        radius+=thick_flat_1 + thick_flat_1
+        radius+=thick_flat_2 + thick_flat_2
+        radius+=thick_flat_3 + thick_flat_3
+        radius+=thick_flat_4 + thick_flat_4
+        radius+=thick_flat_5 + thick_flat_5
+        radius+=thick_flat_6 + thick_flat_6
+        radius+=thick_flat_7 + thick_flat_7
+        radius+=thick_flat_8 + thick_flat_8
+        radius+=thick_flat_9 + thick_flat_9
+        radius+=thick_flat_10 + thick_flat_10
         return radius
+
+def VR(radius):
+        """
+        Calculates volume ratio for P(q)*S(q)
+
+        :return: the value of the volume ratio
+        """
+
+        return 1.0
 
 demo = dict(
         n_shells=4,
