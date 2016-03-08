@@ -1,5 +1,5 @@
 r"""
-This model calculates an empirical functional form for SAS data using SpericalSLD profile
+This model calculated scattering intensity by building a continuous custom SLD profile
 
 Similarly to the OnionExpShellModel, this model provides the form factor, P(q), for a multi-shell sphere,
 where the interface between the each neighboring shells can be described by one of a number of functions
@@ -160,10 +160,26 @@ L A Feigin and D I Svergun, Structure Analysis by Small-Angle X-Ray and Neutron 
 from numpy import inf
 
 name = "spherical_sld"
-title = "Sperical SLD intensity calculation"
+title = "Intensity calculation using custom build spherical sld profile"
 description = """
-            I(q) =
-               background = Incoherent background [1/cm]
+        P(q)=f**2/V_particle
+        where f = f_core + f_inter + f_flat + f_solvent
+
+        sld_core0: the SLD of the substrate
+		sld_solv: the SLD of the incident medium
+		or superstrate
+		sld_flatN: the SLD of the flat region of
+		the N'th layer
+		thick_flatN: the thickness of the flat
+		region of the N'th layer
+		func_interN: the function used to describe
+		the interface of the N'th layer
+		nu_interN: the coefficient for the func_interN
+		thick_interN: the thickness of the interface
+		of the N'th layer
+		Note: the layer number starts to increase
+		from the bottom (substrate) to the top.
+
         """
 category = "sphere-based"
 
