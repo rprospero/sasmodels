@@ -24,7 +24,7 @@ double pringleC(double radius,
                 double phi,
                 double n) {
 
-    double nord, va, vb;
+    double va, vb;
     double bessargs, cosarg, bessargcb;
     double r, retval, yyy;
 
@@ -69,7 +69,7 @@ double pringleS(double radius,
                 double phi,
                 double n) {
 
-    double nord, va, vb, summ;
+    double va, vb, summ;
     double bessargs, sinarg, bessargcb;
     double r, retval, yyy;
     // set up the integration
@@ -94,11 +94,14 @@ double pringleS(double radius,
         yyy = Gauss76Wt[ii]*r*sin(sinarg)
                     *jn(n, bessargcb)
                     *jn(2*n, bessargs);
-
         summ += yyy;
 
+        //if(n== -1.0 && ii == 75)
+        //    printf("Q, bessarg, n %f %f %f %f\n", q, bessargs, n, jn(2*n, bessargs));
         ii += 1;
-    } while (ii < N_POINTS_76);			// end of loop over quadrature points
+    } while (ii < N_POINTS_76);
+
+    // end of loop over quadrature points
     //
     // calculate value of integral to return
 
@@ -120,14 +123,13 @@ double _kernel(double thickness,
     const double sincterm = pow(sin(sincarg) / sincarg, 2.0);
 
     //calculate sum term from n = -3 to 3
-    double sumterm = 0;
+    double sumterm = 0.0;
     for (int nn = -3; nn <= 3; nn++) {
         double powc = pringleC(radius, alpha, beta, q, phi, nn);
         double pows = pringleS(radius, alpha, beta, q, phi, nn);
-
+        //printf("Q, bessarg, n %f %f %d %f\n", q, phi, nn, powc);
         sumterm += pow(powc, 2.0) + pow(pows, 2.0);
     }
-
     double retval = 4.0 * sin(phi) * sumterm * sincterm;
 
     return retval;
@@ -153,15 +155,15 @@ static double pringles_kernel(double q,
 
     for (int i = 0; i < N_POINTS_76; i++) {
         double phi = (Gauss76Z[i] * (uplim - lolim) + uplim + lolim) / 2.0;
-        summ += Gauss76Wt[i] * _kernel(thickness, radius, alpha, beta, q, phi);
+        double kr =  _kernel(thickness, radius, alpha, beta, q, phi);
+        summ += Gauss76Wt[i] * kr;
     }
-
     double answer = (uplim - lolim) / 2.0 * summ;
     answer *= delrho*delrho;
 
     //convert to [cm-1]
-    answer *= 1.0e-4;
-
+    //answer *= 1.0e-4;
+    answer *= 1.0e1;
     return answer;
 }
 double form_volume(void){

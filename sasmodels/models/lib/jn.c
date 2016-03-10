@@ -70,11 +70,11 @@ double jn( int n, double x )
         }
 
     if( n == 0 )
-        return( sign * j0(x) );
+        return( sign * J0(x) );
     if( n == 1 )
-        return( sign * j1(x) );
+        return( sign * J1(x) );
     if( n == 2 )
-        return( sign * (2.0 * j1(x) / x  -  j0(x)) );
+        return( sign * (2.0 * J1(x) / x  -  J0(x)) );
 
     if( x < MACHEP )
         return( 0.0 );
@@ -115,9 +115,9 @@ double jn( int n, double x )
     while( --k > 0 );
 
     if( fabs(pk) > fabs(pkm1) )
-        ans = j1(x)/pk;
+        ans = J1(x)/pk;
     else
-        ans = j0(x)/pkm1;
+        ans = J0(x)/pkm1;
     return( sign * ans );
 
 }

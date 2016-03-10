@@ -68,7 +68,7 @@ parameters = [
 # pylint: enable=bad-whitespace, line-too-long
 
 # source = ["lib/mconf.h", "lib/polevl.c", "lib/j0.c", "lib/jn.c", "lib/gauss76.c", "pringles.c"]
-source = ["lib/polevl.c", "lib/j0.c", "lib/jn.c", "lib/gauss76.c", "pringles.c"]
+source = ["lib/J0.c", "lib/J1.c", "lib/JN.c", "lib/gauss76.c", "pringles.c"]
 
 demo = dict(background=0.0,
             scale=1.0,
@@ -80,8 +80,14 @@ demo = dict(background=0.0,
             solvent_sld=6.3)
 
 oldname = 'PringlesModel'
-oldpars = dict(pringle_sld='sld_pringle',
-               solvent_sld='sld_solvent')
+oldpars = dict(scale='scale',
+                background='background',
+                thickness = 'thickness',
+                alpha = 'alpha',
+                radius = 'radius',
+                beta='beta',
+                pringle_sld='sld_pringle',
+                solvent_sld='sld_solvent')
 
 tests = [
     [{'guinier_scale': 1.0,
