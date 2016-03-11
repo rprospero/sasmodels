@@ -58,8 +58,8 @@ category = "shape:cylinder"
 # pylint: disable=bad-whitespace, line-too-long
 #   ["name", "units", default, [lower, upper], "type","description"],
 parameters = [
-    ["radius",      "Ang",         60.0,   [0, inf],    "", "Guinier length scale"],
-    ["thickness",   "Ang",         10.0,   [0, inf],    "", "Guinier length scale"],
+    ["radius",      "Ang",         60.0,   [0, inf],    "", "Pringle radius"],
+    ["thickness",   "Ang",         10.0,   [0, inf],    "", "Thickness of pringle"],
     ["alpha",       "",             0.001, [-inf, inf], "", "Lorentzian length scale"],
     ["beta",        "",             0.02,  [-inf, inf], "", "Radius of gyration"],
     ["pringle_sld", "1e-6/Ang^2",   1.0,   [-inf, inf], "", "Fractal exponent"],
@@ -67,8 +67,8 @@ parameters = [
     ]
 # pylint: enable=bad-whitespace, line-too-long
 
-# source = ["lib/mconf.h", "lib/polevl.c", "lib/j0.c", "lib/jn.c", "lib/gauss76.c", "pringles.c"]
-source = ["lib/J0.c", "lib/J1.c", "lib/JN.c", "lib/gauss76.c", "pringles.c"]
+#source = ["lib/polevl.c", "lib/j0.c", "lib/jn.c", "lib/gauss76.c", "pringles.c"]
+source = ["lib/J0_nr.c", "lib/J1.c", "lib/JN_nr.c", "lib/gauss76.c", "pringles.c"]
 
 demo = dict(background=0.0,
             scale=1.0,
@@ -77,14 +77,14 @@ demo = dict(background=0.0,
             alpha=0.001,
             beta=0.02,
             pringle_sld=1.0,
-            solvent_sld=6.3)
+            solvent_sld=6.35)
 
 oldname = 'PringlesModel'
-oldpars = dict(scale='scale',
-                background='background',
+oldpars = dict(background='background',
+                scale='scale',
+                radius = 'radius',
                 thickness = 'thickness',
                 alpha = 'alpha',
-                radius = 'radius',
                 beta='beta',
                 pringle_sld='sld_pringle',
                 solvent_sld='sld_solvent')

@@ -1,4 +1,5 @@
-double form_volume(void);
+double form_volume(double radius,
+          double thickness);
 
 double Iq(double q,
           double radius,
@@ -96,8 +97,6 @@ double pringleS(double radius,
                     *jn(2*n, bessargs);
         summ += yyy;
 
-        //if(n== -1.0 && ii == 75)
-        //    printf("Q, bessarg, n %f %f %f %f\n", q, bessargs, n, jn(2*n, bessargs));
         ii += 1;
     } while (ii < N_POINTS_76);
 
@@ -127,7 +126,6 @@ double _kernel(double thickness,
     for (int nn = -3; nn <= 3; nn++) {
         double powc = pringleC(radius, alpha, beta, q, phi, nn);
         double pows = pringleS(radius, alpha, beta, q, phi, nn);
-        //printf("Q, bessarg, n %f %f %d %f\n", q, phi, nn, powc);
         sumterm += pow(powc, 2.0) + pow(pows, 2.0);
     }
     double retval = 4.0 * sin(phi) * sumterm * sincterm;
@@ -155,20 +153,19 @@ static double pringles_kernel(double q,
 
     for (int i = 0; i < N_POINTS_76; i++) {
         double phi = (Gauss76Z[i] * (uplim - lolim) + uplim + lolim) / 2.0;
-        double kr =  _kernel(thickness, radius, alpha, beta, q, phi);
-        summ += Gauss76Wt[i] * kr;
+        summ += Gauss76Wt[i] * _kernel(thickness, radius, alpha, beta, q, phi);
     }
+
     double answer = (uplim - lolim) / 2.0 * summ;
     answer *= delrho*delrho;
 
-    //convert to [cm-1]
-    //answer *= 1.0e-4;
-    answer *= 1.0e1;
     return answer;
 }
-double form_volume(void){
-    // Unused, so free to return garbage.
-    return NAN;
+
+double form_volume(double radius,
+        double thickness){
+
+        return M_PI*radius*radius*thickness;
 }
 
 double Iq(double q,
@@ -179,13 +176,15 @@ double Iq(double q,
           double pringle_sld,
           double solvent_sld)
 {
-    return pringles_kernel(q,
+    const double form = pringles_kernel(q,
                   radius,
                   thickness,
                   alpha,
                   beta,
                   pringle_sld,
                   solvent_sld);
+
+    return 1.0e-4*form*form_volume(radius,thickness);
 }
 
 double Iqxy(double qx, double qy,
@@ -197,12 +196,12 @@ double Iqxy(double qx, double qy,
             double solvent_sld)
 {
     double q = sqrt(qx*qx + qy*qy);
-    return pringles_kernel(q,
-                  radius,
-                  thickness,
-                  alpha,
-                  beta,
-                  pringle_sld,
-                  solvent_sld);
+    return Iq(q,
+            radius,
+            thickness,
+            alpha,
+            beta,
+            pringle_sld,
+            solvent_sld);
 }
 
