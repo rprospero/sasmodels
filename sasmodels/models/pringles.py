@@ -60,8 +60,8 @@ category = "shape:cylinder"
 parameters = [
     ["radius",      "Ang",         60.0,   [0, inf],    "", "Pringle radius"],
     ["thickness",   "Ang",         10.0,   [0, inf],    "", "Thickness of pringle"],
-    ["alpha",       "",             0.001, [-inf, inf], "", "Lorentzian length scale"],
-    ["beta",        "",             0.02,  [-inf, inf], "", "Radius of gyration"],
+    ["alpha",       "",             0.001, [-inf, inf], "", "Curvature parameter"],
+    ["beta",        "",             0.02,  [-inf, inf], "", "Curvature paramter"],
     ["pringle_sld", "1e-6/Ang^2",   1.0,   [-inf, inf], "", "Fractal exponent"],
     ["solvent_sld", "1e-6/Ang^2",   6.3,   [-inf, inf], "", "Correlation length"]
     ]
@@ -90,10 +90,11 @@ oldpars = dict(background='background',
                 solvent_sld='sld_solvent')
 
 tests = [
-    [{'guinier_scale': 1.0,
-      'lorentzian_scale': 1.0,
-      'gyration_radius': 10.0,
-      'fractal_exp': 10.0,
-      'cor_length': 20.0
+    [{'radius': 1.0,
+      'thickness': 1.0,
+      'alpha': 10.0,
+      'beta': 10.0,
+      'pringle_sld': 20.0,
+      'solvent_sld': 20.0,
      }, 0.1, 0.716532],
     ]
