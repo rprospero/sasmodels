@@ -12,6 +12,8 @@ Wim Bouwman (w.g.bouwman@tudelft.nl), June 2013
 from __future__ import division
 
 import numpy as np  # type: ignore
+import logging
+import matplotlib.pyplot as plt
 from numpy import pi, exp  # type: ignore
 from scipy.special import j0
 
@@ -77,3 +79,89 @@ class SesansTransform(object):
 
         self.q_calc = q
         self._H, self._H0 = H, H0
+
+
+class SesansTransform2D(object):
+    """
+    Spin-Echo SANS transform calculator.  Similar to a resolution function,
+    the SesansTransform object takes I(q) for the set of *q_calc* values and
+    produces a transformed dataset.  This particular implementation takes
+    a 2D set of q-values and returns a 1D SESANS signal, allowing the
+    examination of oriented samples in SASView.
+
+    *SElength* (A) is the set of spin-echo lengths in the measured data.
+
+    *zaccept* (1/A) is the maximum acceptance of scattering vector in the spin
+    echo encoding dimension (for ToF: Q of min(R) and max(lam)).
+
+    *Rmax* (A) is the maximum size sensitivity; larger radius requires more
+    computation time.
+    """
+
+    #: SElength from the data in the original data units; not used by transform
+    #: but the GUI uses it, so make sure that it is present.
+    q = None  # type: np.ndarray
+
+    #: q values to calculate when computing transform
+    q_calc = None  # type: np.ndarray
+
+    # transform arrays
+    _H = None   # type: np.ndarray
+    _H0 = None  # type: np.ndarray
+    _lam = None
+
+    def __init__(self, z, SElength, lam, zaccept, Rmax):
+        logging.warn("Creating Transform")
+        self.q = z
+        self.__set_cosine(SElength, lam, zaccept, Rmax)
+
+    def apply(self, Iq):
+        # tye: (np.ndarray) -> np.ndarray
+
+        # Calculate the polarisation at each pixel
+        logging.warn("Applying Transform")
+        pol = self.pol  # FIXME
+        logging.warn(pol.shape)
+        logging.warn(self.q_calc.shape)
+
+        # We encode on direction Y, so all counts along direction X can
+        # be summed
+        # Iq = np.sum(Iq, axis=0)
+        Iq = Iq.reshape((-1, 1))
+        logging.warn(Iq.shape)
+
+        # Get the up and down counts
+        P = np.nansum(Iq * pol, axis=0)
+        P /= np.nansum(Iq, axis=0)
+        plt.clf()
+        for i in range(0, 40, 10):
+            plt.plot(self.q_calc, (Iq * pol)[:, i]/np.sum(Iq, axis=0),
+            # plt.plot(self.q_calc, Iq[:]/np.sum(Iq, axis=0),
+            # plt.plot(self.q_calc, Iq,
+                     label=str(i))
+        plt.legend()
+        plt.yscale("log")
+        plt.savefig("/home/adam/debug.png")
+        logging.warn(P)
+        logging.warn(np.log(P)*self.lam**-2)
+
+        return np.log(P)  # *self.lam**-2
+
+    def __set_cosine(self, SElength, lam, zaccept, Rmax):
+        logging.warn("Calculating Transform")
+        SElength = np.asarray(SElength, dtype='float32')
+
+        q_max = 2*pi / (SElength[1] - SElength[0])
+        q_min = 0.1 * 2*pi / (np.size(SElength) * SElength[-1])
+        q = np.arange(q_min, q_max, q_min, dtype='float32')
+        dq = q_min
+
+        H0 = np.float32(dq/(2*pi))
+
+        repq = np.tile(q, (SElength.size, 1)).T
+        repSE = np.tile(SElength, (q.size, 1))
+        H = np.cos(repSE*repq)
+
+        self.q_calc = q
+        self.pol = H
+        self.lam = lam
