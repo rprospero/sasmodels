@@ -341,8 +341,8 @@ class DllModel(KernelModel):
         dll_handle = self._dll._handle
         if os.name == 'nt':
             ct.windll.kernel32.FreeLibrary(dll_handle)
-        else:
-            _ct.dlclose(dll_handle)
+        # else:
+        #     _ct.dlclose(dll_handle)
         del self._dll
         self._dll = None
 
