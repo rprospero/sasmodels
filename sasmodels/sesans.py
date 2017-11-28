@@ -13,7 +13,6 @@ from __future__ import division
 
 import numpy as np  # type: ignore
 import logging
-import matplotlib.pyplot as plt
 from numpy import pi, exp  # type: ignore
 from scipy.special import j0
 
@@ -133,15 +132,6 @@ class SesansTransform2D(object):
         # Get the up and down counts
         P = np.nansum(Iq * pol, axis=0)
         P /= np.nansum(Iq, axis=0)
-        plt.clf()
-        for i in range(0, 40, 10):
-            plt.plot(self.q_calc, (Iq * pol)[:, i]/np.sum(Iq, axis=0),
-            # plt.plot(self.q_calc, Iq[:]/np.sum(Iq, axis=0),
-            # plt.plot(self.q_calc, Iq,
-                     label=str(i))
-        plt.legend()
-        plt.yscale("log")
-        plt.savefig("/home/adam/debug.png")
         logging.warn(P)
         logging.warn(np.log(P)*self.lam**-2)
 
