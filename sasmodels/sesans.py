@@ -122,10 +122,11 @@ class SesansTransform2D(object):
         pol = self.pol  # FIXME
         logging.warn(pol.shape)
         logging.warn(self.q_calc.shape)
+        logging.warn(Iq)
 
         # We encode on direction Y, so all counts along direction X can
         # be summed
-        # Iq = np.sum(Iq, axis=0)
+        Iq = np.sum(Iq, axis=0)
         Iq = Iq.reshape((-1, 1))
         logging.warn(Iq.shape)
 
@@ -135,7 +136,7 @@ class SesansTransform2D(object):
         logging.warn(P)
         logging.warn(np.log(P)*self.lam**-2)
 
-        return np.log(P)  # *self.lam**-2
+        return np.log(P)*self.lam**-2
 
     def __set_cosine(self, SElength, lam, zaccept, Rmax):
         logging.warn("Calculating Transform")
@@ -143,7 +144,7 @@ class SesansTransform2D(object):
 
         q_max = 2*pi / (SElength[1] - SElength[0])
         q_min = 0.1 * 2*pi / (np.size(SElength) * SElength[-1])
-        q = np.arange(q_min, q_max, q_min, dtype='float32')
+        q = np.arange(q_min, q_max, q_min*5, dtype='float32')
         dq = q_min
 
         H0 = np.float32(dq/(2*pi))
