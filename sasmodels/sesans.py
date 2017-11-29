@@ -130,13 +130,7 @@ class SesansTransform2D(object):
         Iq = Iq.reshape((-1, 1))
         logging.warn(Iq.shape)
 
-        # Get the up and down counts
-        P = np.nansum(Iq * pol, axis=0)
-        P /= np.nansum(Iq, axis=0)
-        logging.warn(P)
-        logging.warn(np.log(P)*self.lam**-2)
-
-        return np.log(P)*self.lam**-2
+        return (np.nansum(Iq * pol, axis=0) - np.nansum(Iq, axis=0))*self.dq**2/100
 
     def __set_cosine(self, SElength, lam, zaccept, Rmax):
         logging.warn("Calculating Transform")
@@ -144,8 +138,9 @@ class SesansTransform2D(object):
 
         q_max = 2*pi / (SElength[1] - SElength[0])
         q_min = 0.1 * 2*pi / (np.size(SElength) * SElength[-1])
-        q = np.arange(q_min, q_max, q_min*5, dtype='float32')
+        q = np.arange(q_min, q_max, q_min*1, dtype='float32')
         dq = q_min
+        self.dq = dq
 
         H0 = np.float32(dq/(2*pi))
 
