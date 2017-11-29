@@ -138,8 +138,8 @@ class SesansTransform2D(object):
 
         q_max = 2*pi / (SElength[1] - SElength[0])
         q_min = 0.1 * 2*pi / (np.size(SElength) * SElength[-1])
-        q = np.arange(q_min, q_max, q_min*1, dtype='float32')
         dq = q_min
+        q = np.arange(q_min, q_max, dq, dtype='float32')
         self.dq = dq
 
         H0 = np.float32(dq/(2*pi))
