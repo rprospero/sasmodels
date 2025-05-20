@@ -1,0 +1,167 @@
+{
+  "nodes": {
+    "columnize": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1647045594,
+        "narHash": "sha256-YJEIujoRpLvUM4H4CB1nEJaYStFOSVKIGzchnptlt7M=",
+        "owner": "rocky",
+        "repo": "pycolumnize",
+        "rev": "85fd81630567176181e8c9d9c22b59c252aa26f4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "rocky",
+        "ref": "3.11",
+        "repo": "pycolumnize",
+        "type": "github"
+      }
+    },
+    "flake-utils": {
+      "inputs": {
+        "systems": "systems"
+      },
+      "locked": {
+        "lastModified": 1731533236,
+        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
+        "type": "github"
+      },
+      "original": {
+        "id": "flake-utils",
+        "type": "indirect"
+      }
+    },
+    "hatch-sphinx": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1745838531,
+        "narHash": "sha256-ahgzJsi4tq+Ehr7+ts14K+UMdcGzL7uaa3ZSXVDOpEo=",
+        "owner": "llimeht",
+        "repo": "hatch-sphinx",
+        "rev": "4545fa7b2ebb9e81a45ca45c7aef41598fb1da77",
+        "type": "github"
+      },
+      "original": {
+        "owner": "llimeht",
+        "ref": "v0.0.3",
+        "repo": "hatch-sphinx",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1747485343,
+        "narHash": "sha256-YbsZyuRE1tobO9sv0PUwg81QryYo3L1F3R3rF9bcG38=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "9b5ac7ad45298d58640540d0323ca217f32a6762",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "ref": "nixos-24.11",
+        "type": "indirect"
+      }
+    },
+    "outdated": {
+      "locked": {
+        "lastModified": 1735563628,
+        "narHash": "sha256-OnSAY7XDSx7CtDoqNh8jwVwh4xNL/2HaJxGjryLWzX8=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "b134951a4c9f3c995fd7be05f3243f8ecd65d798",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "ref": "nixos-24.05",
+        "type": "indirect"
+      }
+    },
+    "pyproject-nix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1746540146,
+        "narHash": "sha256-QxdHGNpbicIrw5t6U3x+ZxeY/7IEJ6lYbvsjXmcxFIM=",
+        "owner": "pyproject-nix",
+        "repo": "pyproject.nix",
+        "rev": "e09c10c24ebb955125fda449939bfba664c467fd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "pyproject-nix",
+        "repo": "pyproject.nix",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "columnize": "columnize",
+        "flake-utils": "flake-utils",
+        "hatch-sphinx": "hatch-sphinx",
+        "nixpkgs": "nixpkgs",
+        "outdated": "outdated",
+        "pyproject-nix": "pyproject-nix",
+        "siphash24": "siphash24",
+        "tccbox": "tccbox"
+      }
+    },
+    "siphash24": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1728997320,
+        "narHash": "sha256-/7XrRD4e7jLTUY/8mBbJ4dSo5P6pj8GRpSreIOZpKp0=",
+        "owner": "dnicolodi",
+        "repo": "python-siphash24",
+        "rev": "758ad7150fba792e4735da93eafc8ca299e68564",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dnicolodi",
+        "ref": "v1.7",
+        "repo": "python-siphash24",
+        "type": "github"
+      }
+    },
+    "systems": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    "tccbox": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1746603976,
+        "narHash": "sha256-J4rAUrvlJrxoE8qfeqUyy4g/gwF2ebZjgkYp4nxY9o4=",
+        "owner": "metab0t",
+        "repo": "tccbox",
+        "rev": "8a1a6ce605f897e2ab0eae14c5387b45dd8d8e2f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "metab0t",
+        "repo": "tccbox",
+        "type": "github"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

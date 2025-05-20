@@ -2,7 +2,7 @@
 requires = [
   "hatchling",
   "hatch-requirements-txt",
-  "hatch-sphinx",
+  # "hatch-sphinx",
   "hatch-vcs",
   "bumps==0.*",
   "docutils",
@@ -10,9 +10,9 @@ requires = [
   "columnize",
   "numpy",
   "scipy",
-  "siphash24",
+  # "siphash24",
   "sphinx",
-  "tccbox",
+  # "tccbox",
 ]
 build-backend = "hatchling.build"
 
@@ -117,25 +117,25 @@ exclude = [
 [tool.hatch.build.targets.wheel.force-include]
 "doc/" = "sasmodels/docs-source"
 
-[[tool.hatch.build.targets.wheel.hooks.sphinx.tools]]
-tool = "custom"
-environment = { PYTHONPATH = ".." }
-out_dir = "model"
-expand_globs = true
-commands = [
-  "{python} genapi.py",
-  "{python} genmodel.py ../sasmodels/models/[a-z]*.py",
-  "{python} -c \"import shutil; shutil.copytree('../sasmodels/models/img/', 'model/img/', dirs_exist_ok=True)\"",
-  "{python} gentoc.py ../sasmodels/models/[a-z]*.py",
-]
+# [[tool.hatch.build.targets.wheel.hooks.sphinx.tools]]
+# tool = "custom"
+# environment = { PYTHONPATH = ".." }
+# out_dir = "model"
+# expand_globs = true
+# commands = [
+#   "{python} genapi.py",
+#   "{python} genmodel.py ../sasmodels/models/[a-z]*.py",
+#   "{python} -c \"import shutil; shutil.copytree('../sasmodels/models/img/', 'model/img/', dirs_exist_ok=True)\"",
+#   "{python} gentoc.py ../sasmodels/models/[a-z]*.py",
+# ]
 
-[[tool.hatch.build.targets.wheel.hooks.sphinx.tools]]
-tool = "build"
-format = "html"
-source = "."
-out_dir = "../build/doc"
-warnings = true
-keep_going = true
+# [[tool.hatch.build.targets.wheel.hooks.sphinx.tools]]
+# tool = "build"
+# format = "html"
+# source = "."
+# out_dir = "../build/doc"
+# warnings = true
+# keep_going = true
 
 [tool.pytest.ini_options]
 minversion = "6.0"
