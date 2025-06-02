@@ -1,6 +1,6 @@
 {
   "nodes": {
-    "columnize": {
+    "columnize-src": {
       "flake": false,
       "locked": {
         "lastModified": 1647045594,
@@ -103,14 +103,13 @@
     },
     "root": {
       "inputs": {
-        "columnize": "columnize",
+        "columnize-src": "columnize-src",
         "flake-utils": "flake-utils",
         "hatch-sphinx": "hatch-sphinx",
         "nixpkgs": "nixpkgs",
         "outdated": "outdated",
         "pyproject-nix": "pyproject-nix",
-        "siphash24": "siphash24",
-        "tccbox": "tccbox"
+        "siphash24": "siphash24"
       }
     },
     "siphash24": {
@@ -142,22 +141,6 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
-        "type": "github"
-      }
-    },
-    "tccbox": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1746603976,
-        "narHash": "sha256-J4rAUrvlJrxoE8qfeqUyy4g/gwF2ebZjgkYp4nxY9o4=",
-        "owner": "metab0t",
-        "repo": "tccbox",
-        "rev": "8a1a6ce605f897e2ab0eae14c5387b45dd8d8e2f",
-        "type": "github"
-      },
-      "original": {
-        "owner": "metab0t",
-        "repo": "tccbox",
         "type": "github"
       }
     }
