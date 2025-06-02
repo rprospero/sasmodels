@@ -93,6 +93,7 @@
             pythonEnv
             past.hdfview
             pkgs.ruff
+            pkgs.tinycc
             pkgs.python312Packages.python-lsp-server
             pkgs.python312Packages.python-lsp-ruff
             pkgs.python312Packages.pylsp-mypy
